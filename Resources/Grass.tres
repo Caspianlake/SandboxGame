@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://bgtw5hcv01vy8"]
+
+[ext_resource type="Texture2D" uid="uid://dlrrlk0mywx5j" path="res://Assets/Materials/Grass/Grass005_1K-PNG_NormalGL.png" id="1_x8es1"]
+[ext_resource type="Texture2D" uid="uid://utwjx60mx4x3" path="res://Assets/Materials/Grass/Grass005_1K-PNG_Roughness.png" id="2_0ilgr"]
+
+[resource]
+metallic_specular = 0.2
+roughness_texture = ExtResource("2_0ilgr")
+normal_enabled = true
+normal_texture = ExtResource("1_x8es1")
