@@ -8,6 +8,7 @@
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_lkv7d")
+mouse_sensitivity = 0.001
 
 [node name="CollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_he2x2")
