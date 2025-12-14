@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://b2w3l77n766g0"]
+[gd_scene load_steps=8 format=3 uid="uid://b2w3l77n766g0"]
 
 [ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="1_i04dx"]
+[ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyf1o"]
 sky_top_color = Color(0.28000003, 0.49666673, 0.8, 1)
@@ -42,3 +43,6 @@ shape = SubResource("BoxShape3D_jyf1o")
 
 [node name="Mesh" type="MeshInstance3D" parent="World/Baseplate"]
 mesh = SubResource("BoxMesh_i04dx")
+
+[node name="Character" parent="World" instance=ExtResource("2_8pvmw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5932891, 0)
