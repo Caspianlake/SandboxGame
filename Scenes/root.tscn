@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b2w3l77n766g0"]
+[gd_scene load_steps=6 format=3 uid="uid://b2w3l77n766g0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyf1o"]
 sky_top_color = Color(0.28000003, 0.49666673, 0.8, 1)
@@ -15,6 +15,12 @@ sky = SubResource("Sky_i04dx")
 ambient_light_source = 2
 ambient_light_color = Color(0.4955091, 0.4955091, 0.4955091, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_jyf1o"]
+size = Vector3(2048, 1, 2048)
+
+[sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
+size = Vector3(2048, 1, 2048)
+
 [node name="Root" type="Node"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -25,3 +31,11 @@ shadow_enabled = true
 environment = SubResource("Environment_8pvmw")
 
 [node name="World" type="Node3D" parent="."]
+
+[node name="Baseplate" type="StaticBody3D" parent="World"]
+
+[node name="CollisionShape" type="CollisionShape3D" parent="World/Baseplate"]
+shape = SubResource("BoxShape3D_jyf1o")
+
+[node name="Mesh" type="MeshInstance3D" parent="World/Baseplate"]
+mesh = SubResource("BoxMesh_i04dx")
