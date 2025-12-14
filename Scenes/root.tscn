@@ -1,4 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2w3l77n766g0"]
+[gd_scene load_steps=7 format=3 uid="uid://b2w3l77n766g0"]
+
+[ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="1_i04dx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyf1o"]
 sky_top_color = Color(0.28000003, 0.49666673, 0.8, 1)
@@ -19,6 +21,7 @@ ambient_light_color = Color(0.4955091, 0.4955091, 0.4955091, 1)
 size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
+material = ExtResource("1_i04dx")
 size = Vector3(2048, 1, 2048)
 
 [node name="Root" type="Node"]
