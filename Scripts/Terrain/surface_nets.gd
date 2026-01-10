@@ -82,43 +82,73 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 					cell_map[x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y] = vertices.size() - 1
 
 	# Pass 2: Generate faces
+	# For each edge that crosses the iso-surface, create a quad connecting the 4 adjacent cells
+	
+	# X-axis edges: connect cells sharing an edge along X
+	for x in range(cell_dims.x):
+		for z in range(cell_dims.z - 1):
+			for y in range(cell_dims.y - 1):
+				# Check if edge along X crosses the surface
+				var grid_idx = x * dx + z * dz + y * dy
+				var v0 = sdf_grid[grid_idx + dy + dz]  # Corner at (x, y+1, z+1)
+				var v1 = sdf_grid[grid_idx + dx + dy + dz]  # Corner at (x+1, y+1, z+1)
+				
+				if (v0 < iso_level) != (v1 < iso_level):
+					# Edge crosses surface - get the 4 cells sharing this edge
+					var c1 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c2 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
+					var c3 = _safe_map_idx(x, y + 1, z + 1, cell_dims, cell_map)
+					var c4 = _safe_map_idx(x, y, z + 1, cell_dims, cell_map)
+					
+					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+						if v0 < iso_level:
+							_add_quad(indices, c1, c2, c3, c4)
+						else:
+							_add_quad(indices, c4, c3, c2, c1)
+
+	# Y-axis edges: connect cells sharing an edge along Y
+	for x in range(cell_dims.x - 1):
+		for z in range(cell_dims.z - 1):
+			for y in range(cell_dims.y):
+				# Check if edge along Y crosses the surface
+				var grid_idx = x * dx + z * dz + y * dy
+				var v0 = sdf_grid[grid_idx + dx + dz]  # Corner at (x+1, y, z+1)
+				var v1 = sdf_grid[grid_idx + dx + dy + dz]  # Corner at (x+1, y+1, z+1)
+				
+				if (v0 < iso_level) != (v1 < iso_level):
+					# Edge crosses surface - get the 4 cells sharing this edge
+					var c1 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c2 = _safe_map_idx(x, y, z + 1, cell_dims, cell_map)
+					var c3 = _safe_map_idx(x + 1, y, z + 1, cell_dims, cell_map)
+					var c4 = _safe_map_idx(x + 1, y, z, cell_dims, cell_map)
+					
+					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+						if v0 < iso_level:
+							_add_quad(indices, c1, c2, c3, c4)
+						else:
+							_add_quad(indices, c4, c3, c2, c1)
+
+	# Z-axis edges: connect cells sharing an edge along Z
 	for x in range(cell_dims.x - 1):
 		for z in range(cell_dims.z):
 			for y in range(cell_dims.y - 1):
-				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
-				var idx2 = (x + 1) * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
-				var c1 = cell_map[idx1]
-				var c2 = cell_map[idx2]
-				var c3 = _safe_map_idx(x + 1, y + 1, z, cell_dims, cell_map)
-				var c4 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
-				if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-					_add_quad(indices, c1, c2, c3, c4)
-
-	# Y-axis
-	for x in range(cell_dims.x):
-		for z in range(cell_dims.z - 1):
-			for y in range(cell_dims.y - 1):
-				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
-				var idx2 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + (y + 1)
-				var c1 = cell_map[idx1]
-				var c2 = cell_map[idx2]
-				var c3 = _safe_map_idx(x, y + 1, z + 1, cell_dims, cell_map)
-				var c4 = _safe_map_idx(x, y, z + 1, cell_dims, cell_map)
-				if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-					_add_quad(indices, c1, c2, c3, c4)
-
-	# Z-axis
-	for x in range(cell_dims.x):
-		for z in range(cell_dims.z - 1):
-			for y in range(cell_dims.y - 1):
-				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
-				var idx2 = x * (cell_dims.z * cell_dims.y) + (z + 1) * cell_dims.y + y
-				var c1 = cell_map[idx1]
-				var c2 = cell_map[idx2]
-				var c3 = _safe_map_idx(x, y + 1, z + 1, cell_dims, cell_map)
-				var c4 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
-				if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-					_add_quad(indices, c1, c2, c3, c4)
+				# Check if edge along Z crosses the surface
+				var grid_idx = x * dx + z * dz + y * dy
+				var v0 = sdf_grid[grid_idx + dx + dy]  # Corner at (x+1, y+1, z)
+				var v1 = sdf_grid[grid_idx + dx + dy + dz]  # Corner at (x+1, y+1, z+1)
+				
+				if (v0 < iso_level) != (v1 < iso_level):
+					# Edge crosses surface - get the 4 cells sharing this edge
+					var c1 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c2 = _safe_map_idx(x + 1, y, z, cell_dims, cell_map)
+					var c3 = _safe_map_idx(x + 1, y + 1, z, cell_dims, cell_map)
+					var c4 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
+					
+					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+						if v0 < iso_level:
+							_add_quad(indices, c1, c2, c3, c4)
+						else:
+							_add_quad(indices, c4, c3, c2, c1)
 
 	if vertices.is_empty() or indices.is_empty():
 		return null
