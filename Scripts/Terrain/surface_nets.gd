@@ -20,9 +20,10 @@ const CUBE_CORNERS = [
 ## dims: Grid dimensions (should include padding for seamless chunks).
 ## iso_level: Surface threshold (default 0.0).
 ## skip_min_boundary: If true, skips cells at x=0, y=0, z=0 to avoid duplicate faces between chunks.
-static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_level: float = 0.0, skip_min_boundary: bool = false) -> ArrayMesh:
+static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_key: Vector3i, iso_level: float = 0.0, skip_min_boundary: bool = false) -> ArrayMesh:
 	if dims.x < 2 or dims.y < 2 or dims.z < 2:
-		return null
+		SignalBus.MeshingEnded.emit.call_deferred(chunk_key)
+		return 
 
 	var vertices = PackedVector3Array()
 	var normals = PackedVector3Array()
@@ -160,7 +161,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 							_add_quad(indices, c1, c2, c3, c4)
 
 	if vertices.is_empty() or indices.is_empty():
-		SignalBus.MeshingEnded.emit.call_deferred(null)
+		SignalBus.MeshingEnded.emit.call_deferred(chunk_key)
 		return
 
 	var arrays = []
@@ -171,7 +172,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 	
 	var mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	SignalBus.MeshingEnded.emit.call_deferred(mesh)
+	SignalBus.MeshingEnded.emit.call_deferred(mesh, chunk_key)
 	return
 
 ## Calculates the normal using the analytical gradient of trilinear interpolation.

@@ -8,17 +8,24 @@ extends Node3D
 var tasks_remaining: int = 0
 var t_start: int
 
-func sdfGenEnded(data):
+func sdfGenEnded(data, chunk_key):
 	tasks_remaining -= 1
 	
 	if data:
-		ThreadPool.add_task(SurfaceNets.generate_mesh.bind(data,chunk_size+Vector3i(2,2,2)))
+		ThreadPool.add_task(SurfaceNets.generate_mesh.bind(data,chunk_size+Vector3i(2,2,2),chunk_key))
 		tasks_remaining += 1
 	else:
 		print("buh")
 
-func meshingEnded(data):
+func meshingEnded(data, chunk_key):
 	tasks_remaining -= 1
+	
+	if data is ArrayMesh:
+		var mi = MeshInstance3D.new()
+		mi.mesh = data
+		mi.set_surface_override_material(0, t_material)
+		mi.position = Vector3(chunk_key.x * chunk_size.x, 0, chunk_key.z * chunk_size.z)
+		add_child(mi)
 	
 	if tasks_remaining == 0:
 		print("49 Chunks completed in: ",Time.get_ticks_msec()-t_start)

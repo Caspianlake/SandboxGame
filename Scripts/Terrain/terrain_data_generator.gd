@@ -19,5 +19,5 @@ static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_k
 				sdf_data[idx] = y - column_height
 				idx += 1
 	
-	SignalBus.SDFGenEnded.emit.call_deferred(sdf_data)
+	SignalBus.SDFGenEnded.emit.call_deferred(sdf_data, chunk_key)
 	return
