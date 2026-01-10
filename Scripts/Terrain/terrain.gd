@@ -6,7 +6,16 @@ extends Node3D
 
 var sample_size:= chunk_size + Vector3i(2,2,2)
 
+var thread: Thread
+var mutex: Mutex
+var semaphore: Semaphore
+var exit_thread:= false
+
 func _ready() -> void:
+	
+	print(OS.get_processor_count())
+	thread = Thread.new()
+	
 	for cx in range(-2,3):
 		for cz in range(-2,3):
 			var sdf_data := PackedFloat32Array()
@@ -25,7 +34,9 @@ func _ready() -> void:
 						sdf_data[idx] = y - column_height
 						idx += 1
 			
-			var mesh = SurfaceNets.generate_mesh(sdf_data, sample_size)
+			
+			thread.start(SurfaceNets.generate_mesh.bind(sdf_data,sample_size))
+			var mesh: ArrayMesh = thread.wait_to_finish()
 			print("Chunk (%d, %d) generated in %d ms" % [cx, cz, Time.get_ticks_msec() - t])
 			
 			# 4. Display it
@@ -38,3 +49,6 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	pass
+	
+func _exit_tree():
+	thread.wait_to_finish()
