@@ -101,10 +101,11 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 					var c4 = _safe_map_idx(x, y, z + 1, cell_dims, cell_map)
 					
 					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+						# Godot uses clockwise winding - swap order based on which side is inside
 						if v0 < iso_level:
-							_add_quad(indices, c1, c2, c3, c4)
-						else:
 							_add_quad(indices, c4, c3, c2, c1)
+						else:
+							_add_quad(indices, c1, c2, c3, c4)
 
 	# Y-axis edges: connect cells sharing an edge along Y
 	for x in range(cell_dims.x - 1):
@@ -123,10 +124,11 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 					var c4 = _safe_map_idx(x + 1, y, z, cell_dims, cell_map)
 					
 					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+						# Godot uses clockwise winding - swap order based on which side is inside
 						if v0 < iso_level:
-							_add_quad(indices, c1, c2, c3, c4)
-						else:
 							_add_quad(indices, c4, c3, c2, c1)
+						else:
+							_add_quad(indices, c1, c2, c3, c4)
 
 	# Z-axis edges: connect cells sharing an edge along Z
 	for x in range(cell_dims.x - 1):
@@ -145,10 +147,11 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 					var c4 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
 					
 					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+						# Godot uses clockwise winding - swap order based on which side is inside
 						if v0 < iso_level:
-							_add_quad(indices, c1, c2, c3, c4)
-						else:
 							_add_quad(indices, c4, c3, c2, c1)
+						else:
+							_add_quad(indices, c1, c2, c3, c4)
 
 	if vertices.is_empty() or indices.is_empty():
 		return null
@@ -211,7 +214,9 @@ static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vecto
 				 (c011 - c010) * (1.0 - fx) * fy + \
 				 (c111 - c110) * fx * fy
 	
-	var normal = Vector3(grad_x, grad_y, grad_z)
+	# Negate gradient: SDF gradient points from inside (negative) to outside (positive)
+	# We want normals pointing outward from the surface (away from inside)
+	var normal = -Vector3(grad_x, grad_y, grad_z)
 	if normal.length_squared() > 0.0001:
 		return normal.normalized()
 	return Vector3.UP
