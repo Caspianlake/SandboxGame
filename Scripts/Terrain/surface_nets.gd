@@ -91,10 +91,10 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 				# X-axis
 				var val2 = sdf_grid[base_idx + dx]
 				if (val1 < iso_level) != (val2 < iso_level):
-					var c1 = _safe_map_idx(x, y - 1, z - 1, cell_dims, cell_map)
-					var c2 = _safe_map_idx(x, y, z - 1, cell_dims, cell_map)
-					var c3 = _safe_map_idx(x, y - 1, z, cell_dims, cell_map)
-					var c4 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c1 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c2 = _safe_map_idx(x, y+1, z, cell_dims, cell_map)
+					var c3 = _safe_map_idx(x, y, z+1, cell_dims, cell_map)
+					var c4 = _safe_map_idx(x, y+1, z+1, cell_dims, cell_map)
 					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
 						if val1 < val2: _add_quad(indices, c1, c3, c4, c2)
 						else:           _add_quad(indices, c1, c2, c4, c3)
@@ -102,23 +102,23 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 				# Y-axis
 				var val3 = sdf_grid[base_idx + dy]
 				if (val1 < iso_level) != (val3 < iso_level):
-					var c1 = _safe_map_idx(x - 1, y, z - 1, cell_dims, cell_map)
-					var c2 = _safe_map_idx(x, y, z - 1, cell_dims, cell_map)
-					var c3 = _safe_map_idx(x - 1, y, z, cell_dims, cell_map)
-					var c4 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c1 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c2 = _safe_map_idx(x+1, y, z, cell_dims, cell_map)
+					var c3 = _safe_map_idx(x, y, z+1, cell_dims, cell_map)
+					var c4 = _safe_map_idx(x+1, y, z+1, cell_dims, cell_map)
 					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-						if val1 < val2: _add_quad(indices, c1, c2, c4, c3)
+						if val1 < val3: _add_quad(indices, c1, c2, c4, c3)
 						else:           _add_quad(indices, c1, c3, c4, c2)
 
 				# Z-axis
 				var val4 = sdf_grid[base_idx + dz]
 				if (val1 < iso_level) != (val4 < iso_level):
-					var c1 = _safe_map_idx(x - 1, y - 1, z, cell_dims, cell_map)
-					var c2 = _safe_map_idx(x, y - 1, z, cell_dims, cell_map)
-					var c3 = _safe_map_idx(x - 1, y, z, cell_dims, cell_map)
-					var c4 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c1 = _safe_map_idx(x, y, z, cell_dims, cell_map)
+					var c2 = _safe_map_idx(x+1, y, z, cell_dims, cell_map)
+					var c3 = _safe_map_idx(x, y+1, z, cell_dims, cell_map)
+					var c4 = _safe_map_idx(x+1, y+1, z, cell_dims, cell_map)
 					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-						if val1 < val2: _add_quad(indices, c1, c3, c4, c2)
+						if val1 < val4: _add_quad(indices, c1, c3, c4, c2)
 						else:           _add_quad(indices, c1, c2, c4, c3)
 
 	if vertices.is_empty() or indices.is_empty():
