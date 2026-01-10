@@ -160,7 +160,8 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 							_add_quad(indices, c1, c2, c3, c4)
 
 	if vertices.is_empty() or indices.is_empty():
-		return null
+		SignalBus.MeshingEnded.emit.call_deferred(null)
+		return
 
 	var arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -170,7 +171,8 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 	
 	var mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	return mesh
+	SignalBus.MeshingEnded.emit.call_deferred(mesh)
+	return
 
 ## Calculates the normal using the analytical gradient of trilinear interpolation.
 ## This computes the exact partial derivatives of the trilinear interpolation formula.

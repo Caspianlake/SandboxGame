@@ -2,53 +2,36 @@ extends Node3D
 
 @export var t_noise:= FastNoiseLite.new()
 @export var t_material:= StandardMaterial3D.new()
-@export var chunk_size:= Vector3i(16,16,16)
+@export var chunk_size:= Vector3i(16,256,16)
 
-var sample_size:= chunk_size + Vector3i(2,2,2)
 
-var thread: Thread
-var mutex: Mutex
-var semaphore: Semaphore
-var exit_thread:= false
+var tasks_remaining: int = 0
+var t_start: int
+
+func sdfGenEnded(data):
+	tasks_remaining -= 1
+	
+	if data:
+		ThreadPool.add_task(SurfaceNets.generate_mesh.bind(data,chunk_size+Vector3i(2,2,2)))
+		tasks_remaining += 1
+	else:
+		print("buh")
+
+func meshingEnded(data):
+	tasks_remaining -= 1
+	
+	if tasks_remaining == 0:
+		print("49 Chunks completed in: ",Time.get_ticks_msec()-t_start)
 
 func _ready() -> void:
 	
-	print(OS.get_processor_count())
-	thread = Thread.new()
+	SignalBus.SDFGenEnded.connect(sdfGenEnded)
+	SignalBus.MeshingEnded.connect(meshingEnded)
 	
-	for cx in range(-2,3):
-		for cz in range(-2,3):
-			var sdf_data := PackedFloat32Array()
-			sdf_data.resize(sample_size.x*sample_size.y*sample_size.z)
-			
-			var chunk_offset:= Vector3(cx * chunk_size.x, 0, cz * chunk_size.z)
-			var idx = 0
-			
-			var t = Time.get_ticks_msec()
-			
-			for x in range(sample_size.x):
-				for z in range(sample_size.z):
-					var column_height:= remap(clampf(t_noise.get_noise_2d(chunk_offset.x+x,chunk_offset.z+z),-1,1),-1,1,0,chunk_size.y)
-					
-					for y in range(sample_size.y):
-						sdf_data[idx] = y - column_height
-						idx += 1
-			
-			
-			thread.start(SurfaceNets.generate_mesh.bind(sdf_data,sample_size))
-			var mesh: ArrayMesh = thread.wait_to_finish()
-			print("Chunk (%d, %d) generated in %d ms" % [cx, cz, Time.get_ticks_msec() - t])
-			
-			# 4. Display it
-			if mesh != null:
-				var mi = MeshInstance3D.new()
-				mi.mesh = mesh
-				mi.set_surface_override_material(0, t_material)
-				mi.position = Vector3(cx * chunk_size.x, 0, cz * chunk_size.z)
-				add_child(mi)
-
-func _process(_delta: float) -> void:
-	pass
+	t_start = Time.get_ticks_msec()
 	
-func _exit_tree():
-	thread.wait_to_finish()
+	for cx in range(-3,4):
+		for cz in range(-3,4):
+			var chunk_key := Vector3i(cx,0,cz)
+			ThreadPool.add_task(TerrainDataGenerator.generate_sdf.bind(t_noise,chunk_size,chunk_key))
+			tasks_remaining += 1
