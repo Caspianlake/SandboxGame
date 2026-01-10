@@ -25,16 +25,17 @@ size = Vector3(2048, 1, 2048)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i04dx"]
 transparency = 1
-albedo_color = Color(0, 0.6666665, 1, 0.39215687)
+albedo_color = Color(0, 0.4199999, 0.63, 0.39215687)
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
 material = SubResource("StandardMaterial3D_i04dx")
-size = Vector3(2048, 1, 2048)
+size = Vector3(20000, 128, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_c3mwy"]
+frequency = 0.0057
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4g5cr"]
-albedo_color = Color(0.2816666, 0.65, 0.09749998, 1)
+albedo_color = Color(0.3, 0.3, 0.3, 1)
 metallic_specular = 0.1
 
 [node name="Root" type="Node"]

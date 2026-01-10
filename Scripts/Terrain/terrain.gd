@@ -3,6 +3,7 @@ extends Node3D
 @export var t_noise:= FastNoiseLite.new()
 @export var t_material:= StandardMaterial3D.new()
 @export var chunk_size:= Vector3i(16,256,16)
+@export var render_distance:= 16
 
 
 var tasks_remaining: int = 0
@@ -37,8 +38,8 @@ func _ready() -> void:
 	
 	t_start = Time.get_ticks_msec()
 	
-	for cx in range(-3,4):
-		for cz in range(-3,4):
+	for cx in range(-render_distance,render_distance+1):
+		for cz in range(-render_distance,render_distance+1):
 			var chunk_key := Vector3i(cx,0,cz)
 			ThreadPool.add_task(TerrainDataGenerator.generate_sdf.bind(t_noise,chunk_size,chunk_key))
 			tasks_remaining += 1
