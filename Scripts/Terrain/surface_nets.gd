@@ -21,6 +21,9 @@ const CUBE_CORNERS = [
 ## iso_level: Surface threshold (default 0.0).
 ## skip_min_boundary: If true, skips cells at x=0, y=0, z=0 to avoid duplicate faces between chunks.
 static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_key: Vector3i, iso_level: float = 0.0, skip_min_boundary: bool = false) -> ArrayMesh:
+	
+	var t_start = Time.get_ticks_msec()
+	
 	if dims.x < 2 or dims.y < 2 or dims.z < 2:
 		SignalBus.MeshingEnded.emit.call_deferred(chunk_key)
 		return 
@@ -173,6 +176,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_ke
 	var mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	SignalBus.MeshingEnded.emit.call_deferred(mesh, chunk_key)
+	print("Grid meshed in: ",Time.get_ticks_msec()-t_start)
 	return
 
 ## Calculates the normal using the analytical gradient of trilinear interpolation.

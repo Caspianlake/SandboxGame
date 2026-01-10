@@ -3,6 +3,9 @@ extends Node
 
 
 static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_key: Vector3i):
+	
+	var t_start = Time.get_ticks_msec()
+	
 	var sample_size:= chunk_size + Vector3i(2,2,2)
 	var sdf_data := PackedFloat32Array()
 	sdf_data.resize(sample_size.x*sample_size.y*sample_size.z)
@@ -20,4 +23,6 @@ static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_k
 				idx += 1
 	
 	SignalBus.SDFGenEnded.emit.call_deferred(sdf_data, chunk_key)
+	
+	print("SDF Generated in: ",Time.get_ticks_msec()-t_start)
 	return

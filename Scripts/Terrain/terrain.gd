@@ -29,7 +29,7 @@ func meshingEnded(data, chunk_key):
 		add_child(mi)
 	
 	if tasks_remaining == 0:
-		print("49 Chunks completed in: ",Time.get_ticks_msec()-t_start)
+		print(pow(render_distance*2+1,2)," Chunks completed in: ",Time.get_ticks_msec()-t_start)
 
 func _ready() -> void:
 	
