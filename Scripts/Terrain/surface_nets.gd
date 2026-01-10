@@ -82,46 +82,43 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 					cell_map[x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y] = vertices.size() - 1
 
 	# Pass 2: Generate faces
-	for x in range(1,cell_dims.x - 1):
+	for x in range(cell_dims.x - 1):
 		for z in range(cell_dims.z):
 			for y in range(cell_dims.y):
 				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
 				var idx2 = (x + 1) * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
-				if cell_map[idx1] != -1 and cell_map[idx2] != -1:
-					var c1 = cell_map[idx1]
-					var c2 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
-					var c3 = _safe_map_idx(x, y, z + 1, cell_dims, cell_map)
-					var c4 = _safe_map_idx(x, y + 1, z + 1, cell_dims, cell_map)
-					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-						_add_quad(indices, c1, c2, c4, c3)
+				var c1 = cell_map[idx1]
+				var c2 = cell_map[idx2]
+				var c3 = _safe_map_idx(x + 1, y + 1, z, cell_dims, cell_map)
+				var c4 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
+				if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+					_add_quad(indices, c1, c2, c3, c4)
 
 	# Y-axis
 	for x in range(cell_dims.x):
 		for z in range(cell_dims.z):
-			for y in range(1, cell_dims.y - 1):
+			for y in range(cell_dims.y - 1):
 				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
 				var idx2 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + (y + 1)
-				if cell_map[idx1] != -1 and cell_map[idx2] != -1:
-					var c1 = cell_map[idx1]
-					var c2 = _safe_map_idx(x + 1, y, z, cell_dims, cell_map)
-					var c3 = _safe_map_idx(x, y, z + 1, cell_dims, cell_map)
-					var c4 = _safe_map_idx(x + 1, y, z + 1, cell_dims, cell_map)
-					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-						_add_quad(indices, c1, c2, c4, c3)
+				var c1 = cell_map[idx1]
+				var c2 = cell_map[idx2]
+				var c3 = _safe_map_idx(x, y + 1, z + 1, cell_dims, cell_map)
+				var c4 = _safe_map_idx(x, y, z + 1, cell_dims, cell_map)
+				if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+					_add_quad(indices, c1, c2, c3, c4)
 
 	# Z-axis
 	for x in range(cell_dims.x):
-		for z in range(1, cell_dims.z - 1):
+		for z in range(cell_dims.z - 1):
 			for y in range(cell_dims.y):
 				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
 				var idx2 = x * (cell_dims.z * cell_dims.y) + (z + 1) * cell_dims.y + y
-				if cell_map[idx1] != -1 and cell_map[idx2] != -1:
-					var c1 = cell_map[idx1]
-					var c2 = _safe_map_idx(x + 1, y, z, cell_dims, cell_map)
-					var c3 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
-					var c4 = _safe_map_idx(x + 1, y + 1, z, cell_dims, cell_map)
-					if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
-						_add_quad(indices, c1, c2, c4, c3)
+				var c1 = cell_map[idx1]
+				var c2 = cell_map[idx2]
+				var c3 = _safe_map_idx(x, y + 1, z + 1, cell_dims, cell_map)
+				var c4 = _safe_map_idx(x, y + 1, z, cell_dims, cell_map)
+				if c1 != -1 and c2 != -1 and c3 != -1 and c4 != -1:
+					_add_quad(indices, c1, c2, c3, c4)
 
 	if vertices.is_empty() or indices.is_empty():
 		return null

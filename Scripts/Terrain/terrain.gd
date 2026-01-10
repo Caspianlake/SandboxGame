@@ -4,7 +4,7 @@ extends Node3D
 @export var t_material:= StandardMaterial3D.new()
 @export var chunk_size:= Vector3i(16,16,16)
 
-var sample_size:= Vector3i(2,2,2)
+var sample_size:= chunk_size + Vector3i(2,2,2)
 
 func _ready() -> void:
 	for cx in range(-2,3):
