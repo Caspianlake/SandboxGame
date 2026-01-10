@@ -86,3 +86,4 @@ theme_override_constants/margin_bottom = 10
 script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_c3mwy")
 t_material = SubResource("StandardMaterial3D_4g5cr")
+chunk_size = Vector3i(32, 32, 32)

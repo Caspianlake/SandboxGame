@@ -23,6 +23,7 @@ func _ready() -> void:
 					
 					for y in range(sample_size.y):
 						sdf_data[idx] = y - column_height
+						idx += 1
 			
 			var mesh = SurfaceNets.generate_mesh(sdf_data, sample_size)
 			print("Chunk (%d, %d) generated in %d ms" % [cx, cz, Time.get_ticks_msec() - t])
@@ -32,7 +33,6 @@ func _ready() -> void:
 				var mi = MeshInstance3D.new()
 				mi.mesh = mesh
 				mi.set_surface_override_material(0, t_material)
-				# Position at chunk offset
 				mi.position = Vector3(cx * chunk_size.x, 0, cz * chunk_size.z)
 				add_child(mi)
 
