@@ -166,57 +166,28 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	return mesh
 
-## Calculates the normal using the analytical gradient of trilinear interpolation.
-## Uses the cell centered at the nearest grid point for consistent results at boundaries.
+## Calculates the normal using central differences on the SDF grid.
+## The gradient of the SDF points toward increasing values (outside for standard SDF).
 static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vector3i, pos: Vector3) -> Vector3:
 	var dy_stride = 1
 	var dz_stride = dims.y
 	var dx_stride = dims.y * dims.z
 	
-	# Offset position by 0.5 so we sample from the cell centered on the nearest grid point
-	# This ensures vertices at cell boundaries get consistent normals
-	var centered_pos = pos - Vector3(0.5, 0.5, 0.5)
+	# Sample positions for central differences
+	var xi = clampi(int(round(pos.x)), 1, dims.x - 2)
+	var yi = clampi(int(round(pos.y)), 1, dims.y - 2)
+	var zi = clampi(int(round(pos.z)), 1, dims.z - 2)
 	
-	# Get the cell containing the centered position
-	var x0 = clampi(int(floor(centered_pos.x + 0.5)), 0, dims.x - 2)
-	var y0 = clampi(int(floor(centered_pos.y + 0.5)), 0, dims.y - 2)
-	var z0 = clampi(int(floor(centered_pos.z + 0.5)), 0, dims.z - 2)
+	var idx = xi * dx_stride + zi * dz_stride + yi * dy_stride
 	
-	# Local position within cell [0, 1]
-	var fx = clampf(pos.x - float(x0), 0.0, 1.0)
-	var fy = clampf(pos.y - float(y0), 0.0, 1.0)
-	var fz = clampf(pos.z - float(z0), 0.0, 1.0)
+	# Central differences for gradient
+	var grad_x = sdf_grid[idx + dx_stride] - sdf_grid[idx - dx_stride]
+	var grad_y = sdf_grid[idx + dy_stride] - sdf_grid[idx - dy_stride]
+	var grad_z = sdf_grid[idx + dz_stride] - sdf_grid[idx - dz_stride]
 	
-	# Get the 8 corner values of the cell
-	var idx000 = x0 * dx_stride + z0 * dz_stride + y0 * dy_stride
-	var c000 = sdf_grid[idx000]
-	var c100 = sdf_grid[idx000 + dx_stride]
-	var c010 = sdf_grid[idx000 + dy_stride]
-	var c110 = sdf_grid[idx000 + dx_stride + dy_stride]
-	var c001 = sdf_grid[idx000 + dz_stride]
-	var c101 = sdf_grid[idx000 + dx_stride + dz_stride]
-	var c011 = sdf_grid[idx000 + dy_stride + dz_stride]
-	var c111 = sdf_grid[idx000 + dx_stride + dy_stride + dz_stride]
-	
-	# Analytical gradient of trilinear interpolation
-	var grad_x = (c100 - c000) * (1.0 - fy) * (1.0 - fz) + \
-				 (c110 - c010) * fy * (1.0 - fz) + \
-				 (c101 - c001) * (1.0 - fy) * fz + \
-				 (c111 - c011) * fy * fz
-	
-	var grad_y = (c010 - c000) * (1.0 - fx) * (1.0 - fz) + \
-				 (c110 - c100) * fx * (1.0 - fz) + \
-				 (c011 - c001) * (1.0 - fx) * fz + \
-				 (c111 - c101) * fx * fz
-	
-	var grad_z = (c001 - c000) * (1.0 - fx) * (1.0 - fy) + \
-				 (c101 - c100) * fx * (1.0 - fy) + \
-				 (c011 - c010) * (1.0 - fx) * fy + \
-				 (c111 - c110) * fx * fy
-	
-	# Negate gradient: SDF gradient points from inside (negative) to outside (positive)
-	# We want normals pointing outward from the surface (away from inside)
-	var normal = -Vector3(grad_x, grad_y, grad_z)
+	# The gradient points toward increasing SDF values
+	# For standard SDF (negative inside, positive outside), gradient points outward
+	var normal = Vector3(grad_x, grad_y, grad_z)
 	if normal.length_squared() > 0.0001:
 		return normal.normalized()
 	return Vector3.UP
