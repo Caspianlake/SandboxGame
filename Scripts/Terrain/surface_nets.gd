@@ -20,7 +20,7 @@ const CUBE_CORNERS = [
 ## dims: Grid dimensions (should include padding for seamless chunks).
 ## iso_level: Surface threshold (default 0.0).
 ## skip_min_boundary: If true, skips cells at x=0, y=0, z=0 to avoid duplicate faces between chunks.
-static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_level: float = 0.0, skip_min_boundary: bool = true) -> ArrayMesh:
+static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_level: float = 0.0, skip_min_boundary: bool = false) -> ArrayMesh:
 	if dims.x < 2 or dims.y < 2 or dims.z < 2:
 		return null
 
@@ -179,15 +179,22 @@ static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vecto
 	var dz_stride = dims.y
 	var dx_stride = dims.y * dims.z
 	
-	# Get the cell containing the position (clamped to allow central differences)
-	var x0 = clampi(int(floor(pos.x)), 1, dims.x - 3)
-	var y0 = clampi(int(floor(pos.y)), 1, dims.y - 3)
-	var z0 = clampi(int(floor(pos.z)), 1, dims.z - 3)
+	# Clamp position to valid range for central differences (need 1 cell margin on each side)
+	var clamped_pos = Vector3(
+		clampf(pos.x, 1.0, float(dims.x - 3)),
+		clampf(pos.y, 1.0, float(dims.y - 3)),
+		clampf(pos.z, 1.0, float(dims.z - 3))
+	)
+	
+	# Get the cell containing the clamped position
+	var x0 = int(floor(clamped_pos.x))
+	var y0 = int(floor(clamped_pos.y))
+	var z0 = int(floor(clamped_pos.z))
 	
 	# Fractional position within the cell [0, 1]
-	var fx = pos.x - float(x0)
-	var fy = pos.y - float(y0)
-	var fz = pos.z - float(z0)
+	var fx = clamped_pos.x - float(x0)
+	var fy = clamped_pos.y - float(y0)
+	var fz = clamped_pos.z - float(z0)
 	
 	# Compute gradient at 8 corners using central differences
 	var gradients: Array[Vector3] = []
