@@ -84,7 +84,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 	# Pass 2: Generate faces
 	for x in range(cell_dims.x - 1):
 		for z in range(cell_dims.z):
-			for y in range(cell_dims.y):
+			for y in range(cell_dims.y - 1):
 				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
 				var idx2 = (x + 1) * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
 				var c1 = cell_map[idx1]
@@ -96,7 +96,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 
 	# Y-axis
 	for x in range(cell_dims.x):
-		for z in range(cell_dims.z):
+		for z in range(cell_dims.z - 1):
 			for y in range(cell_dims.y - 1):
 				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
 				var idx2 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + (y + 1)
@@ -110,7 +110,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, iso_leve
 	# Z-axis
 	for x in range(cell_dims.x):
 		for z in range(cell_dims.z - 1):
-			for y in range(cell_dims.y):
+			for y in range(cell_dims.y - 1):
 				var idx1 = x * (cell_dims.z * cell_dims.y) + z * cell_dims.y + y
 				var idx2 = x * (cell_dims.z * cell_dims.y) + (z + 1) * cell_dims.y + y
 				var c1 = cell_map[idx1]
