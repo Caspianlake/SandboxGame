@@ -80,6 +80,7 @@ theme_override_constants/margin_bottom = 10
 script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_c3mwy")
 t_material = ExtResource("3_vnucn")
+render_distance = 5
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 300, 0)
