@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
+[ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="3_vnucn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyf1o"]
 sky_top_color = Color(0.28000003, 0.49666673, 0.8, 1)
@@ -30,10 +31,6 @@ size = Vector3(20000, 128, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_c3mwy"]
 frequency = 0.0057
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4g5cr"]
-albedo_color = Color(0.3, 0.3, 0.3, 1)
-metallic_specular = 0.1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8pvmw"]
 size = Vector3(20000, 1, 20000)
@@ -82,7 +79,7 @@ theme_override_constants/margin_bottom = 10
 [node name="Terrain" type="Node3D" parent="World"]
 script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_c3mwy")
-t_material = SubResource("StandardMaterial3D_4g5cr")
+t_material = ExtResource("3_vnucn")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 300, 0)
