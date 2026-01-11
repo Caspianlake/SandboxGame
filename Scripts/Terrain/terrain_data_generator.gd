@@ -26,7 +26,7 @@ static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_k
 				sdf_data[idx] = y - column_height
 				idx += 1
 	
-	SignalBus.SDFGenEnded.emit.call_deferred(sdf_data, chunk_key)
+	SignalBus.sdf_gen_ended.emit.call_deferred(sdf_data, chunk_key)
 	
 	print("SDF Generated in: ",Time.get_ticks_msec()-t_start)
 	return
