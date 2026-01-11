@@ -27,7 +27,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_ke
 	var t_start = Time.get_ticks_msec()
 	
 	if dims.x < 2 or dims.y < 2 or dims.z < 2:
-		SignalBus.MeshingEnded.emit.call_deferred(chunk_key)
+		SignalBus.meshing_ended.emit.call_deferred(chunk_key)
 		return 
 
 	var vertices = PackedVector3Array()
@@ -166,7 +166,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_ke
 							_add_quad(indices, c1, c2, c3, c4)
 
 	if vertices.is_empty() or indices.is_empty():
-		SignalBus.MeshingEnded.emit.call_deferred(chunk_key)
+		SignalBus.meshing_ended.emit.call_deferred(chunk_key)
 		return
 
 	var arrays = []
@@ -177,7 +177,7 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_ke
 	
 	var mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	SignalBus.MeshingEnded.emit.call_deferred(mesh, chunk_key)
+	SignalBus.meshing_ended.emit.call_deferred(mesh, chunk_key)
 	print("Grid meshed in: ",Time.get_ticks_msec()-t_start)
 	return
 

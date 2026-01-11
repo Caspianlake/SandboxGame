@@ -16,7 +16,7 @@ var tasks_remaining: int = 0
 var t_start: int
 
 ## Called when SDF generation ends.
-func sdfGenEnded(data, chunk_key):
+func sdf_gen_ended(data, chunk_key):
 	tasks_remaining -= 1
 	
 	if data:
@@ -26,7 +26,7 @@ func sdfGenEnded(data, chunk_key):
 		print("buh")
 
 ## Called when meshing ends.
-func meshingEnded(data, chunk_key):
+func meshing_ended(data, chunk_key):
 	tasks_remaining -= 1
 
 	if data is ArrayMesh:
@@ -42,8 +42,8 @@ func meshingEnded(data, chunk_key):
 ## Initializes the terrain generation.
 func _ready() -> void:
 	
-	SignalBus.SDFGenEnded.connect(sdfGenEnded)
-	SignalBus.MeshingEnded.connect(meshingEnded)
+	SignalBus.sdf_gen_ended.connect(sdf_gen_ended)
+	SignalBus.meshing_ended.connect(meshing_ended)
 	
 	t_start = Time.get_ticks_msec()
 	
