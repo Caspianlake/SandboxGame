@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
-[ext_resource type="Material" uid="uid://b76fnvy4x4sc7" path="res://Resources/Rock.tres" id="3_vnucn"]
+[ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="3_vnucn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyf1o"]
 sky_top_color = Color(0.28000003, 0.49666673, 0.8, 1)
@@ -30,11 +30,17 @@ refraction_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
 material = SubResource("StandardMaterial3D_i04dx")
-size = Vector3(20000, 128, 20000)
+size = Vector3(20000, 64, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_c3mwy"]
 noise_type = 2
-fractal_type = 3
+seed = 213
+frequency = 0.0043
+fractal_type = 2
+domain_warp_enabled = true
+domain_warp_type = 1
+domain_warp_frequency = 0.02
+domain_warp_fractal_octaves = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8pvmw"]
 size = Vector3(20000, 1, 20000)
@@ -51,6 +57,7 @@ environment = SubResource("Environment_8pvmw")
 [node name="World" type="Node3D" parent="."]
 
 [node name="Water" type="MeshInstance3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
@@ -81,10 +88,10 @@ grow_vertical = 0
 theme_override_constants/margin_bottom = 10
 
 [node name="Terrain" type="Node3D" parent="World"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_c3mwy")
 t_material = ExtResource("3_vnucn")
-chunk_size = Vector3i(16, 128, 16)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 300, 0)
