@@ -1,14 +1,21 @@
+## Manages terrain generation and rendering using chunks.
 extends Node3D
 
+## Noise generator for terrain height.
 @export var t_noise:= FastNoiseLite.new()
+## Material for terrain meshes.
 @export var t_material:= StandardMaterial3D.new()
+## Size of each terrain chunk.
 @export var chunk_size:= Vector3i(16,256,16)
+## Distance in chunks to render around the origin.
 @export var render_distance:= 16
 
-
+## Number of remaining tasks.
 var tasks_remaining: int = 0
+## Start time for performance measurement.
 var t_start: int
 
+## Called when SDF generation ends.
 func sdfGenEnded(data, chunk_key):
 	tasks_remaining -= 1
 	
@@ -18,19 +25,21 @@ func sdfGenEnded(data, chunk_key):
 	else:
 		print("buh")
 
+## Called when meshing ends.
 func meshingEnded(data, chunk_key):
 	tasks_remaining -= 1
-	
+
 	if data is ArrayMesh:
 		var mi = MeshInstance3D.new()
 		mi.mesh = data
 		mi.set_surface_override_material(0, t_material)
 		mi.position = Vector3(chunk_key.x * chunk_size.x, 0, chunk_key.z * chunk_size.z)
 		add_child(mi)
-	
+
 	if tasks_remaining == 0:
 		print(pow(render_distance*2+1,2)," Chunks completed in: ",Time.get_ticks_msec()-t_start)
 
+## Initializes the terrain generation.
 func _ready() -> void:
 	
 	SignalBus.SDFGenEnded.connect(sdfGenEnded)

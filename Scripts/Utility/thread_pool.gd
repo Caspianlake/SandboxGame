@@ -1,11 +1,18 @@
+## Manages a pool of threads for executing tasks.
 extends Code
 
+## Queue of tasks to execute.
 var queue: Array[Callable] = []
+## Mutex for thread-safe access to the queue.
 var mutex: Mutex
+## Semaphore to signal available work.
 var semaphore: Semaphore
+## Array of active threads.
 var threads: Array[Thread] = []
+## Flag to signal threads to exit.
 var exit_thread: bool = false
 
+## Initializes the thread pool.
 func _init():
 	mutex = Mutex.new()
 	semaphore = Semaphore.new()
@@ -22,6 +29,7 @@ func add_task(task: Callable):
 	mutex.unlock()
 	semaphore.post() # Wake up one thread
 
+## Main loop for worker threads to process tasks.
 func _thread_loop():
 	while true:
 		semaphore.wait() # Sleep until work is available

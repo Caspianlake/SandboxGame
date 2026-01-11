@@ -4,12 +4,14 @@
 class_name SurfaceNets
 extends RefCounted
 
+## Edges of a cube, connecting corner indices.
 const CUBE_EDGES = [
 	[0, 1], [1, 2], [2, 3], [3, 0],  # Bottom
 	[4, 5], [5, 6], [6, 7], [7, 4],  # Top
 	[0, 4], [1, 5], [2, 6], [3, 7]   # Vertical
 ]
 
+## Corner positions of a cube.
 const CUBE_CORNERS = [
 	Vector3i(0, 0, 0), Vector3i(1, 0, 0), Vector3i(1, 0, 1), Vector3i(0, 0, 1),
 	Vector3i(0, 1, 0), Vector3i(1, 1, 0), Vector3i(1, 1, 1), Vector3i(0, 1, 1)
@@ -181,6 +183,9 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_ke
 
 ## Calculates the normal using the analytical gradient of trilinear interpolation.
 ## This computes the exact partial derivatives of the trilinear interpolation formula.
+## sdf_grid: The SDF data array.
+## dims: Dimensions of the grid.
+## pos: Position to calculate normal at.
 static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vector3i, pos: Vector3) -> Vector3:
 	var dy_stride = 1
 	var dz_stride = dims.y
@@ -240,11 +245,18 @@ static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vecto
 		return gradient.normalized()
 	return Vector3.UP
 
+## Safely gets the vertex index from the cell map.
+## x, y, z: Cell coordinates.
+## dims: Dimensions of the cell map.
+## cell_map: Array of vertex indices.
 static func _safe_map_idx(x: int, y: int, z: int, dims: Vector3i, cell_map: PackedInt32Array) -> int:
 	if x < 0 or x >= dims.x or y < 0 or y >= dims.y or z < 0 or z >= dims.z:
 		return -1
 	return cell_map[x * (dims.z * dims.y) + z * dims.y + y]
 
+## Adds a quad to the indices array as two triangles.
+## indices: The indices array to append to.
+## v1, v2, v3, v4: Vertex indices for the quad.
 static func _add_quad(indices: PackedInt32Array, v1: int, v2: int, v3: int, v4: int):
 	indices.append(v1)
 	indices.append(v2)

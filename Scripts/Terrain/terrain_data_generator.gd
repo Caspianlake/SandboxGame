@@ -1,7 +1,11 @@
+## Generates terrain data using Signed Distance Fields (SDF) from noise.
 class_name TerrainDataGenerator
 extends Node
 
-
+## Generates SDF data for a terrain chunk.
+## noise_map: The noise generator to sample heights.
+## chunk_size: Dimensions of the chunk.
+## chunk_key: Position key of the chunk.
 static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_key: Vector3i):
 	
 	var t_start = Time.get_ticks_msec()
