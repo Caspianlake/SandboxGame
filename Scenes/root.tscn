@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
-[ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="3_vnucn"]
+[ext_resource type="Material" uid="uid://b76fnvy4x4sc7" path="res://Resources/Rock.tres" id="3_vnucn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyf1o"]
 sky_top_color = Color(0.28000003, 0.49666673, 0.8, 1)
@@ -32,15 +32,7 @@ refraction_enabled = true
 material = SubResource("StandardMaterial3D_i04dx")
 size = Vector3(20000, 64, 20000)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_c3mwy"]
-noise_type = 2
-seed = 213
-frequency = 0.0043
-fractal_type = 2
-domain_warp_enabled = true
-domain_warp_type = 1
-domain_warp_frequency = 0.02
-domain_warp_fractal_octaves = 1
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8pvmw"]
 size = Vector3(20000, 1, 20000)
@@ -48,7 +40,7 @@ size = Vector3(20000, 1, 20000)
 [node name="Root" type="Node"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+transform = Transform3D(-0.9301644, -0.34558806, 0.123947516, -0.19886844, 0.7580413, 0.62114775, -0.3086186, 0.5531202, -0.7738297, 0, 0, 0)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -57,7 +49,7 @@ environment = SubResource("Environment_8pvmw")
 [node name="World" type="Node3D" parent="."]
 
 [node name="Water" type="MeshInstance3D" parent="World"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
@@ -90,7 +82,7 @@ theme_override_constants/margin_bottom = 10
 [node name="Terrain" type="Node3D" parent="World"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("2_vnucn")
-t_noise = SubResource("FastNoiseLite_c3mwy")
+t_noise = SubResource("FastNoiseLite_vnucn")
 t_material = ExtResource("3_vnucn")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World"]
