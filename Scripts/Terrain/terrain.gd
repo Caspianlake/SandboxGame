@@ -22,8 +22,6 @@ func sdf_gen_ended(data, chunk_key):
 	if data:
 		ThreadPool.add_task(SurfaceNets.generate_mesh.bind(data,chunk_size+Vector3i(2,2,2),chunk_key))
 		tasks_remaining += 1
-	else:
-		print("buh")
 
 ## Called when meshing ends.
 func meshing_ended(data, chunk_key):
