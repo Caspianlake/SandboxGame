@@ -33,6 +33,8 @@ material = SubResource("StandardMaterial3D_i04dx")
 size = Vector3(20000, 64, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
+fractal_type = 2
+fractal_octaves = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8pvmw"]
 size = Vector3(20000, 1, 20000)
@@ -49,7 +51,7 @@ environment = SubResource("Environment_8pvmw")
 [node name="World" type="Node3D" parent="."]
 
 [node name="Water" type="MeshInstance3D" parent="World"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+visible = false
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
@@ -84,6 +86,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_vnucn")
 t_material = ExtResource("3_vnucn")
+chunk_size = Vector3i(16, 64, 16)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 300, 0)
