@@ -51,7 +51,7 @@ func _thread_loop():
 			task.call()
 
 func _exit_tree():
-	# Clean shutdown: prevent the hang you were worried about
+	# Clean shutdown
 	mutex.lock()
 	exit_thread = true
 	mutex.unlock()
