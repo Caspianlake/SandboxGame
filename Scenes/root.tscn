@@ -2,13 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
-[ext_resource type="Material" uid="uid://b76fnvy4x4sc7" path="res://Resources/Rock.tres" id="3_vnucn"]
+[ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="3_vnucn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyf1o"]
-sky_top_color = Color(0.28000003, 0.49666673, 0.8, 1)
-sky_horizon_color = Color(0.68036395, 0.7345306, 0.81036395, 1)
+sky_top_color = Color(0.56, 0.66, 0.8, 1)
+sky_horizon_color = Color(0.67, 0.67, 0.67, 1)
 ground_bottom_color = Color(0.2, 0.2, 0.2, 1)
-ground_horizon_color = Color(0.68036395, 0.7345306, 0.81036395, 1)
 
 [sub_resource type="Sky" id="Sky_i04dx"]
 sky_material = SubResource("ProceduralSkyMaterial_jyf1o")
@@ -16,10 +15,11 @@ sky_material = SubResource("ProceduralSkyMaterial_jyf1o")
 [sub_resource type="Environment" id="Environment_8pvmw"]
 background_mode = 2
 sky = SubResource("Sky_i04dx")
-ambient_light_source = 2
-ambient_light_color = Color(0.4955091, 0.4955091, 0.4955091, 1)
-ambient_light_energy = 0.5
 ssao_enabled = true
+adjustment_enabled = true
+adjustment_brightness = 1.1
+adjustment_contrast = 1.1
+adjustment_saturation = 1.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i04dx"]
 transparency = 1
@@ -43,6 +43,7 @@ size = Vector3(20000, 1, 20000)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.9301644, -0.34558806, 0.123947516, -0.19886844, 0.7580413, 0.62114775, -0.3086186, 0.5531202, -0.7738297, 0, 0, 0)
+light_color = Color(1, 0.9866667, 0.95, 1)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

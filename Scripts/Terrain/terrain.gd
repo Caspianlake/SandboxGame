@@ -12,13 +12,11 @@ extends Node3D
 
 ## Called when SDF generation ends.
 func sdf_gen_ended(data, chunk_key):
-	
 	if data:
 		ThreadPool.add_task(SurfaceNets.generate_mesh.bind(data,chunk_size+Vector3i(2,2,2),chunk_key))
 
 ## Called when meshing ends.
 func meshing_ended(data, chunk_key):
-
 	if data is ArrayMesh:
 		var mi = MeshInstance3D.new()
 		mi.mesh = data
