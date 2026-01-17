@@ -6,7 +6,7 @@ extends Node
 ## noise_map: The noise generator to sample heights.
 ## chunk_size: Dimensions of the chunk.
 ## chunk_key: Position key of the chunk.
-static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_key: Vector3i):
+static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_key: Vector3i, amplitude: float):
 	
 	var t_start = Time.get_ticks_msec()
 	
@@ -20,7 +20,7 @@ static func generate_sdf(noise_map: FastNoiseLite, chunk_size: Vector3i, chunk_k
 			
 	for x in range(sample_size.x):
 		for z in range(sample_size.z):
-			var column_height:= remap(clampf(noise_map.get_noise_2d(chunk_offset.x+x,chunk_offset.z+z),-1,1),-1,1,0,chunk_size.y)
+			var column_height:= remap(clampf(noise_map.get_noise_2d(chunk_offset.x+x,chunk_offset.z+z),-1,1),-1,1,0,chunk_size.y*amplitude)
 					
 			for y in range(sample_size.y):
 				sdf_data[idx] = y - column_height

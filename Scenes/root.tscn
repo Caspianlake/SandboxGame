@@ -34,7 +34,6 @@ material = SubResource("StandardMaterial3D_i04dx")
 size = Vector3(20000, 64, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
-fractal_octaves = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8pvmw"]
 size = Vector3(20000, 1, 20000)
@@ -42,7 +41,7 @@ size = Vector3(20000, 1, 20000)
 [node name="Root" type="Node"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.9301644, -0.34558806, 0.123947516, -0.19886844, 0.7580413, 0.62114775, -0.3086186, 0.5531202, -0.7738297, 0, 0, 0)
+transform = Transform3D(0.7071067, 0.49999988, -0.49999994, 0, 0.70710665, 0.7071067, 0.7071067, -0.49999988, 0.49999994, 0, 0, 0)
 light_color = Color(1, 0.98333335, 0.9, 1)
 shadow_enabled = true
 
@@ -57,6 +56,7 @@ mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
 [node name="Player" parent="World" instance=ExtResource("2_8pvmw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 258, 0)
 
 [node name="PlayerGUI" type="Control" parent="World/Player"]
 layout_mode = 3
@@ -86,10 +86,10 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_vnucn")
 t_material = ExtResource("3_vnucn")
-chunk_size = Vector3i(16, 64, 16)
+amplitude = 0.5
 
 [node name="StaticBody3D" type="StaticBody3D" parent="World"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 300, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 256, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D"]
 shape = SubResource("BoxShape3D_8pvmw")

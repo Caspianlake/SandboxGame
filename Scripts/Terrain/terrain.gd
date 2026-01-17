@@ -10,6 +10,8 @@ extends Node3D
 ## Distance in chunks to render around the origin.
 @export var render_distance:= 16
 
+@export var amplitude:= 1.0
+
 ## Called when SDF generation ends.
 func sdf_gen_ended(data, chunk_key):
 	if data:
@@ -32,4 +34,4 @@ func _ready() -> void:
 	for cx in range(-render_distance,render_distance+1):
 		for cz in range(-render_distance,render_distance+1):
 			var chunk_key := Vector3i(cx,0,cz)
-			ThreadPool.add_task(TerrainDataGenerator.generate_sdf.bind(t_noise,chunk_size,chunk_key))
+			ThreadPool.add_task(TerrainDataGenerator.generate_sdf.bind(t_noise,chunk_size,chunk_key, amplitude))
