@@ -57,7 +57,6 @@ mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
 [node name="Player" parent="World" instance=ExtResource("2_8pvmw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 305, 0)
 
 [node name="PlayerGUI" type="Control" parent="World/Player"]
 layout_mode = 3
