@@ -34,6 +34,7 @@ material = SubResource("StandardMaterial3D_i04dx")
 size = Vector3(20000, 64, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
+fractal_octaves = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8pvmw"]
 size = Vector3(20000, 1, 20000)
