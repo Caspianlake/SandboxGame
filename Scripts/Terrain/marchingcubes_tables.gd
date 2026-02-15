@@ -1,6 +1,6 @@
 extends Resource
 
-var triangulations: Array[Array] = [
+static var triangulations: Array[Array] = [
 [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 [0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 [0, 1, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -258,7 +258,7 @@ var triangulations: Array[Array] = [
 [0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]]
 
-var points: Array[Vector3i] = [
+static var points: Array[Vector3i] = [
 	Vector3i(0, 0, 0),
 	Vector3i(0, 0, 1),
 	Vector3i(1, 0, 1),
@@ -269,7 +269,7 @@ var points: Array[Vector3i] = [
 	Vector3i(1, 1, 0),
 ]
 
-var edges: Array[Vector2i] = [
+static var edges: Array[Vector2i] = [
 	Vector2i(0, 1),
 	Vector2i(1, 2),
 	Vector2i(2, 3),

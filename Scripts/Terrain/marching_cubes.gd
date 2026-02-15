@@ -3,12 +3,11 @@ extends RefCounted
 
 static var MARCHING_CUBES_TABLES = preload("res://Scripts/Terrain/marchingcubes_tables.gd")
 
-## Generates a mesh from SDF data using Marching Cubes algorithm.
+## Generates a mesh from SDF data using marching cubes algorithm.
 ## sdf_grid: Flattened 3D array (X Z Y order).
-## dims: Grid dimensions (should include padding for seamless chunks).
+## dims: Grid dimensions.
 ## iso_level: Surface threshold (default 0.0).
-## skip_min_boundary: If true, skips cells at x=0, y=0, z=0 to avoid duplicate faces between chunks.
-static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_key: Vector3i, iso_level: float = 0.0, skip_min_boundary: bool = false) -> ArrayMesh:
+static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_key: Vector3i, iso_level: float = 0.0) -> ArrayMesh:
 
 	var t_start = Time.get_ticks_msec()
 
@@ -16,88 +15,12 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_ke
 		SignalBus.meshing_ended.emit.call_deferred(chunk_key)
 		return
 
-	var tables = MARCHING_CUBES_TABLES.new()
-
 	var vertices = PackedVector3Array()
 	var normals = PackedVector3Array()
 	var indices = PackedInt32Array()
 
-	var cell_dims = dims - Vector3i(1, 1, 1)
-
-	# Start from 1 if skipping min boundary to avoid duplicate faces between chunks
-	var start_x = 1 if skip_min_boundary else 0
-	var start_y = 1 if skip_min_boundary else 0
-	var start_z = 1 if skip_min_boundary else 0
-
-	var dy = 1
-	var dz = dims.y
-	var dx = dims.y * dims.z
-
-	# Pass 1: Generate vertices and triangles
-	for x in range(start_x, cell_dims.x):
-		for z in range(start_z, cell_dims.z):
-			for y in range(start_y, cell_dims.y):
-				var base_idx = x * dx + z * dz + y * dy
-
-				var corner_values = [
-					sdf_grid[base_idx],
-					sdf_grid[base_idx + dx],
-					sdf_grid[base_idx + dx + dz],
-					sdf_grid[base_idx + dz],
-					sdf_grid[base_idx + dy],
-					sdf_grid[base_idx + dy + dx],
-					sdf_grid[base_idx + dy + dx + dz],
-					sdf_grid[base_idx + dy + dz]
-				]
-
-				var mask = 0
-				for i in range(8):
-					if corner_values[i] < iso_level:
-						mask |= (1 << i)
-
-				if mask == 0 or mask == 255:
-					continue
-
-				var edge_vertices = PackedInt32Array()
-				edge_vertices.resize(12)
-				edge_vertices.fill(-1)
-
-				var tri_list = tables.triangulations[mask]
-
-				# Generate vertices on edges
-				for vertex_index in tri_list:
-					if vertex_index == -1:
-						continue
-					if edge_vertices[vertex_index] != -1:
-						continue
-
-					var edge = tables.edges[vertex_index]
-					var v0 = corner_values[edge.x]
-					var v1 = corner_values[edge.y]
-					if (v0 < iso_level) == (v1 < iso_level):
-						continue  # Should not happen for valid edges
-
-					var t = (iso_level - v0) / (v1 - v0)
-					var p0 = Vector3(tables.points[edge.x])
-					var p1 = Vector3(tables.points[edge.y])
-					var vertex_pos = p0.lerp(p1, t) + Vector3(x, y, z)
-
-					vertices.append(vertex_pos)
-
-					# Calculate normal
-					var normal = _calculate_normal_from_sdf(sdf_grid, dims, vertex_pos)
-					normals.append(normal)
-
-					edge_vertices[vertex_index] = vertices.size() - 1
-
-				# Add triangles
-				for i in range(0, tri_list.size(), 3):
-					if tri_list[i] == -1 or tri_list[i+1] == -1 or tri_list[i+2] == -1:
-						break
-					indices.append(edge_vertices[tri_list[i]])
-					indices.append(edge_vertices[tri_list[i+1]])
-					indices.append(edge_vertices[tri_list[i+2]])
-
+	
+	
 	if vertices.is_empty() or indices.is_empty():
 		SignalBus.meshing_ended.emit.call_deferred(chunk_key)
 		return
@@ -111,10 +34,14 @@ static func generate_mesh(sdf_grid: PackedFloat32Array, dims: Vector3i, chunk_ke
 	var mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	SignalBus.meshing_ended.emit.call_deferred(mesh, chunk_key)
-	print("Marching Cubes meshed in: ", Time.get_ticks_msec() - t_start)
-	return
+	print("Marching cubes meshed in: ", Time.get_ticks_msec() - t_start)
+	return mesh
 
 ## Calculates the normal using the analytical gradient of trilinear interpolation.
+## This computes the exact partial derivatives of the trilinear interpolation formula.
+## sdf_grid: The SDF data array.
+## dims: Dimensions of the grid.
+## pos: Position to calculate normal at.
 static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vector3i, pos: Vector3) -> Vector3:
 	var dy_stride = 1
 	var dz_stride = dims.y
@@ -131,6 +58,7 @@ static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vecto
 	var fz = clampf(pos.z - float(z0), 0.0, 1.0)
 
 	# Get the 8 corner values of the cell
+	# Corner naming: c[x][y][z] where 0=low, 1=high
 	var idx000 = x0 * dx_stride + z0 * dz_stride + y0 * dy_stride
 	var c000 = sdf_grid[idx000]
 	var c100 = sdf_grid[idx000 + dx_stride]
@@ -140,6 +68,14 @@ static func _calculate_normal_from_sdf(sdf_grid: PackedFloat32Array, dims: Vecto
 	var c101 = sdf_grid[idx000 + dx_stride + dz_stride]
 	var c011 = sdf_grid[idx000 + dy_stride + dz_stride]
 	var c111 = sdf_grid[idx000 + dx_stride + dy_stride + dz_stride]
+
+	# Analytical gradient of trilinear interpolation:
+	# f(x,y,z) = c000(1-x)(1-y)(1-z) + c100*x(1-y)(1-z) + c010(1-x)*y(1-z) + c110*x*y(1-z)
+	#          + c001(1-x)(1-y)*z + c101*x(1-y)*z + c011(1-x)*y*z + c111*x*y*z
+	#
+	# df/dx = (c100-c000)(1-y)(1-z) + (c110-c010)*y(1-z) + (c101-c001)(1-y)*z + (c111-c011)*y*z
+	# df/dy = (c010-c000)(1-x)(1-z) + (c110-c100)*x(1-z) + (c011-c001)(1-x)*z + (c111-c101)*x*z
+	# df/dz = (c001-c000)(1-x)(1-y) + (c101-c100)*x(1-y) + (c011-c010)(1-x)*y + (c111-c110)*x*y
 
 	var one_minus_fx = 1.0 - fx
 	var one_minus_fy = 1.0 - fy
