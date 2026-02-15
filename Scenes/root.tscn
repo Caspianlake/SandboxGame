@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b2w3l77n766g0"]
+[gd_scene format=3 uid="uid://b2w3l77n766g0"]
 
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
@@ -38,27 +38,27 @@ size = Vector3(20000, 64, 20000)
 [sub_resource type="BoxShape3D" id="BoxShape3D_8pvmw"]
 size = Vector3(20000, 1, 20000)
 
-[node name="Root" type="Node"]
+[node name="Root" type="Node" unique_id=1049021786]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1558499061]
 transform = Transform3D(0.7071067, 0.49999988, -0.49999994, 0, 0.70710665, 0.7071067, 0.7071067, -0.49999988, 0.49999994, 0, 0, 0)
 light_color = Color(1, 0.98333335, 0.9, 1)
 shadow_enabled = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=12349684]
 environment = SubResource("Environment_8pvmw")
 
-[node name="World" type="Node3D" parent="."]
+[node name="World" type="Node3D" parent="." unique_id=1153646104]
 
-[node name="Water" type="MeshInstance3D" parent="World"]
+[node name="Water" type="MeshInstance3D" parent="World" unique_id=1933648101]
 visible = false
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
-[node name="Player" parent="World" instance=ExtResource("2_8pvmw")]
+[node name="Player" parent="World" unique_id=813497303 instance=ExtResource("2_8pvmw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 258, 0)
 
-[node name="PlayerGUI" type="Control" parent="World/Player"]
+[node name="PlayerGUI" type="Control" parent="World/Player" unique_id=538000146]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,7 +67,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="World/Player/PlayerGUI"]
+[node name="MarginContainer" type="MarginContainer" parent="World/Player/PlayerGUI" unique_id=93610065]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -81,15 +81,15 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_bottom = 10
 
-[node name="Terrain" type="Node3D" parent="World"]
+[node name="Terrain" type="Node3D" parent="World" unique_id=1542926871]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_vnucn")
 t_material = ExtResource("3_vnucn")
 amplitude = 0.5
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World"]
+[node name="StaticBody3D" type="StaticBody3D" parent="World" unique_id=764416021]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 256, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D" unique_id=637166013]
 shape = SubResource("BoxShape3D_8pvmw")
