@@ -22,15 +22,8 @@ adjustment_enabled = true
 adjustment_brightness = 1.1
 adjustment_saturation = 1.35
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i04dx"]
-transparency = 1
-albedo_color = Color(0, 0.29166675, 0.5, 0.5882353)
-roughness = 0.2
-subsurf_scatter_enabled = true
-refraction_enabled = true
-
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
-material = SubResource("StandardMaterial3D_i04dx")
+material = ExtResource("3_vnucn")
 size = Vector3(20000, 64, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
@@ -51,7 +44,6 @@ environment = SubResource("Environment_8pvmw")
 [node name="World" type="Node3D" parent="." unique_id=1153646104]
 
 [node name="Water" type="MeshInstance3D" parent="World" unique_id=1933648101]
-visible = false
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 

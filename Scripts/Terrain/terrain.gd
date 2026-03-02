@@ -28,10 +28,4 @@ func meshing_ended(data, chunk_key):
 
 ## Initializes the terrain generation.
 func _ready() -> void:
-	SignalBus.sdf_gen_ended.connect(sdf_gen_ended)
-	SignalBus.meshing_ended.connect(meshing_ended)
-	
-	for cx in range(-render_distance,render_distance+1):
-		for cz in range(-render_distance,render_distance+1):
-			var chunk_key := Vector3i(cx,0,cz)
-			ThreadPool.add_task(TerrainDataGenerator.generate_sdf.bind(t_noise,chunk_size,chunk_key, amplitude))
+	pass
