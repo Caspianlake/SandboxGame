@@ -24,7 +24,7 @@ adjustment_saturation = 1.35
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
 material = ExtResource("3_vnucn")
-size = Vector3(20000, 64, 20000)
+size = Vector3(20000, 1, 20000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
 
@@ -40,12 +40,12 @@ environment = SubResource("Environment_8pvmw")
 
 [node name="World" type="Node3D" parent="." unique_id=1153646104]
 
-[node name="Water" type="MeshInstance3D" parent="World" unique_id=1933648101]
+[node name="Baseplate" type="MeshInstance3D" parent="World" unique_id=1933648101]
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
 [node name="Player" parent="World" unique_id=813497303 instance=ExtResource("2_8pvmw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 258, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="PlayerGUI" type="Control" parent="World/Player" unique_id=538000146]
 layout_mode = 3
