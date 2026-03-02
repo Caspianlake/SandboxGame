@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="3_vnucn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
-sky_top_color = Color(0.525, 0.61875004, 0.75, 1)
+sky_top_color = Color(0.495, 0.69749993, 0.9, 1)
 sky_horizon_color = Color(0.6365, 0.6504584, 0.67, 1)
 ground_bottom_color = Color(0.2, 0.2, 0.2, 1)
 ground_horizon_color = Color(0.6365, 0.6510167, 0.67, 1)
@@ -16,20 +16,21 @@ sky_material = SubResource("ProceduralSkyMaterial_vnucn")
 [sub_resource type="Environment" id="Environment_8pvmw"]
 background_mode = 2
 sky = SubResource("Sky_c3mwy")
+ambient_light_source = 2
+ambient_light_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
 ambient_light_sky_contribution = 0.45
+ambient_light_energy = 0.5
 ssao_enabled = true
 adjustment_enabled = true
-adjustment_brightness = 1.1
-adjustment_saturation = 1.35
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
 material = ExtResource("3_vnucn")
-size = Vector3(20000, 1, 20000)
+size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
-size = Vector3(20000, 1, 20000)
+size = Vector3(2048, 1, 2048)
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -76,12 +77,12 @@ t_noise = SubResource("FastNoiseLite_vnucn")
 t_material = ExtResource("3_vnucn")
 amplitude = 0.5
 
-[node name="StaticBody3D" type="StaticBody3D" parent="World" unique_id=1060089903]
+[node name="Baseplate" type="StaticBody3D" parent="World" unique_id=1060089903]
 
-[node name="Baseplate" type="MeshInstance3D" parent="World/StaticBody3D" unique_id=1933648101]
+[node name="Mesh" type="MeshInstance3D" parent="World/Baseplate" unique_id=1933648101]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002302885, 0.0022683144, -0.0018882751)
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D" unique_id=428454751]
+[node name="Collision" type="CollisionShape3D" parent="World/Baseplate" unique_id=428454751]
 shape = SubResource("BoxShape3D_vnucn")
