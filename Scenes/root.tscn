@@ -22,11 +22,14 @@ adjustment_enabled = true
 adjustment_brightness = 1.1
 adjustment_saturation = 1.35
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
+
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
 material = ExtResource("3_vnucn")
 size = Vector3(20000, 1, 20000)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
+size = Vector3(20000, 1, 20000)
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -39,10 +42,6 @@ shadow_enabled = true
 environment = SubResource("Environment_8pvmw")
 
 [node name="World" type="Node3D" parent="." unique_id=1153646104]
-
-[node name="Baseplate" type="MeshInstance3D" parent="World" unique_id=1933648101]
-mesh = SubResource("BoxMesh_i04dx")
-skeleton = NodePath("")
 
 [node name="Player" parent="World" unique_id=813497303 instance=ExtResource("2_8pvmw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -76,3 +75,13 @@ script = ExtResource("2_vnucn")
 t_noise = SubResource("FastNoiseLite_vnucn")
 t_material = ExtResource("3_vnucn")
 amplitude = 0.5
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World" unique_id=1060089903]
+
+[node name="Baseplate" type="MeshInstance3D" parent="World/StaticBody3D" unique_id=1933648101]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002302885, 0.0022683144, -0.0018882751)
+mesh = SubResource("BoxMesh_i04dx")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D" unique_id=428454751]
+shape = SubResource("BoxShape3D_vnucn")
