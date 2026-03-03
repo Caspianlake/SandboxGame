@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bt4oj2scg0mkd"]
+[gd_scene format=3 uid="uid://bt4oj2scg0mkd"]
 
 [ext_resource type="Script" uid="uid://luuks0wsb6ly" path="res://Scripts/character.gd" id="1_lkv7d"]
 
@@ -6,17 +6,17 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_lkv7d"]
 
-[node name="Character" type="CharacterBody3D"]
+[node name="Character" type="CharacterBody3D" unique_id=1340003232]
 script = ExtResource("1_lkv7d")
 mouse_sensitivity = 0.001
 
-[node name="CollisionShape" type="CollisionShape3D" parent="."]
+[node name="CollisionShape" type="CollisionShape3D" parent="." unique_id=430421440]
 shape = SubResource("CapsuleShape3D_he2x2")
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1442305380]
 mesh = SubResource("CapsuleMesh_lkv7d")
 
-[node name="Head" type="Node3D" parent="."]
+[node name="Head" type="Node3D" parent="." unique_id=782122783]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
 
-[node name="Camera" type="Camera3D" parent="Head"]
+[node name="Camera" type="Camera3D" parent="Head" unique_id=1170336657]
