@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
 [ext_resource type="Material" uid="uid://bgtw5hcv01vy8" path="res://Resources/Grass.tres" id="3_vnucn"]
+[ext_resource type="Material" uid="uid://dfux36mn1xhkt" path="res://Resources/Wood.tres" id="4_c3mwy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
 sky_top_color = Color(0.495, 0.69749993, 0.9, 1)
@@ -26,7 +27,7 @@ adjustment_enabled = true
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vnucn"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
-material = ExtResource("3_vnucn")
+material = ExtResource("4_c3mwy")
 size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
@@ -36,7 +37,6 @@ size = Vector3(2048, 1, 2048)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1558499061]
 transform = Transform3D(0.7071067, 0.49999988, -0.49999994, 0, 0.70710665, 0.7071067, 0.7071067, -0.49999988, 0.49999994, 0, 0, 0)
-light_color = Color(1, 0.98333335, 0.9, 1)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=12349684]
