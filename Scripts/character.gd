@@ -35,6 +35,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if event.is_action_pressed("Sprint"):
+		if SPEED > 5.0:
+			SPEED = 5.0
+			JUMP_VELOCITY /= 10
+		else:
+			SPEED = 50.0
+			JUMP_VELOCITY *= 10
 
 
 # Handle physics updates
