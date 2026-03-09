@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
 [ext_resource type="Script" uid="uid://dev35iofgrd2g" path="res://Scripts/Terrain/terrain_data_generator.gd" id="3_c3mwy"]
-[ext_resource type="Material" uid="uid://b76fnvy4x4sc7" path="res://Resources/Rock.tres" id="4_c3mwy"]
 [ext_resource type="Material" uid="uid://7uoy0fnilvfy" path="res://Resources/UniversalMaterial.tres" id="5_4g5cr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
@@ -33,14 +32,15 @@ fog_depth_end = 1000.0
 adjustment_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
-material = ExtResource("4_c3mwy")
 size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
 size = Vector3(2048, 1, 2048)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ckhy6"]
+[sub_resource type="SphereMesh" id="SphereMesh_c3mwy"]
 material = ExtResource("5_4g5cr")
+radius = 1.0
+height = 2.0
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -101,5 +101,5 @@ skeleton = NodePath("")
 shape = SubResource("BoxShape3D_vnucn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World" unique_id=254005885]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0)
-mesh = SubResource("BoxMesh_ckhy6")
+transform = Transform3D(1, 0, 0, 0, 0.08139924, -0.9966816, 0, 0.9966816, 0.08139924, 3, 2, 0)
+mesh = SubResource("SphereMesh_c3mwy")
