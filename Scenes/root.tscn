@@ -38,10 +38,8 @@ size = Vector3(2048, 1, 2048)
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
 size = Vector3(2048, 1, 2048)
 
-[sub_resource type="SphereMesh" id="SphereMesh_c3mwy"]
+[sub_resource type="BoxMesh" id="BoxMesh_c3mwy"]
 material = ExtResource("5_4g5cr")
-radius = 1.0
-height = 2.0
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -102,5 +100,5 @@ skeleton = NodePath("")
 shape = SubResource("BoxShape3D_vnucn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World" unique_id=254005885]
-transform = Transform3D(1, 0, 0, 0, 0.08139924, -0.9966816, 0, 0.9966816, 0.08139924, 3, 2, 0)
-mesh = SubResource("SphereMesh_c3mwy")
+transform = Transform3D(104.62341, 0, 0, 0, 3.9369075, -61.983543, 0, 48.20491, 5.062212, 3, 2, -44.1616)
+mesh = SubResource("BoxMesh_c3mwy")
