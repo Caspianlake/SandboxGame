@@ -1,31 +1,6 @@
 ## Manages terrain generation and rendering using chunks.
 extends Node3D
 
-## Noise generator for terrain height.
-@export var t_noise:= FastNoiseLite.new()
-## Material for terrain meshes.
-@export var t_material:= StandardMaterial3D.new()
-## Size of each terrain chunk.
-@export var chunk_size:= Vector3i(16,256,16)
-## Distance in chunks to render around the origin.
-@export var render_distance:= 16
-
-@export var amplitude:= 1.0
-
-## Called when SDF generation ends.
-func sdf_gen_ended(data, chunk_key):
-	if data:
-		ThreadPool.add_task(SurfaceNets.generate_mesh.bind(data,chunk_size+Vector3i(2,2,2),chunk_key))
-
-## Called when meshing ends.
-func meshing_ended(data, chunk_key):
-	if data is ArrayMesh:
-		var mi = MeshInstance3D.new()
-		mi.mesh = data
-		mi.set_surface_override_material(0, t_material)
-		mi.position = Vector3(chunk_key.x * chunk_size.x, 0, chunk_key.z * chunk_size.z)
-		add_child(mi)
-
 ## Initializes the terrain generation.
 func _ready() -> void:
 	pass
