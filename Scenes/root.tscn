@@ -3,9 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
 [ext_resource type="Material" uid="uid://b76fnvy4x4sc7" path="res://Resources/Rock.tres" id="4_c3mwy"]
-[ext_resource type="Texture2D" uid="uid://bfm57hconpa1t" path="res://Assets/Materials/Main/Wood050_1K-PNG_Color.png" id="5_dun2r"]
-[ext_resource type="Texture2D" uid="uid://bqhty7k2w2oj4" path="res://Assets/Materials/Main/Wood050_1K-PNG_NormalGL.png" id="6_r3lo5"]
-[ext_resource type="Texture2D" uid="uid://dhox8de5rt3qn" path="res://Assets/Materials/Main/Wood050_1K-PNG_Roughness.png" id="7_qtxxq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
 sky_top_color = Color(0.495, 0.69749993, 0.9, 1)
@@ -39,20 +36,6 @@ size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
 size = Vector3(2048, 1, 2048)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8fnbn"]
-albedo_texture = ExtResource("5_dun2r")
-metallic_specular = 0.3
-roughness_texture = ExtResource("7_qtxxq")
-roughness_texture_channel = 4
-normal_enabled = true
-normal_texture = ExtResource("6_r3lo5")
-uv1_scale = Vector3(0.5, 0.5, 0.5)
-uv1_triplanar = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_ckhy6"]
-material = SubResource("StandardMaterial3D_8fnbn")
-size = Vector3(2, 2, 2)
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -104,7 +87,3 @@ skeleton = NodePath("")
 
 [node name="Collision" type="CollisionShape3D" parent="World/Baseplate" unique_id=428454751]
 shape = SubResource("BoxShape3D_vnucn")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World" unique_id=223692940]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5)
-mesh = SubResource("BoxMesh_ckhy6")
