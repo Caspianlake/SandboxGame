@@ -32,6 +32,7 @@ fog_depth_end = 1000.0
 adjustment_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
+material = ExtResource("5_4g5cr")
 size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
