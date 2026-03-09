@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
 [ext_resource type="Script" uid="uid://dev35iofgrd2g" path="res://Scripts/Terrain/terrain_data_generator.gd" id="3_c3mwy"]
 [ext_resource type="Material" uid="uid://b76fnvy4x4sc7" path="res://Resources/Rock.tres" id="4_c3mwy"]
+[ext_resource type="Material" uid="uid://7uoy0fnilvfy" path="res://Resources/UniversalMaterial.tres" id="5_4g5cr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
 sky_top_color = Color(0.495, 0.69749993, 0.9, 1)
@@ -37,6 +38,9 @@ size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
 size = Vector3(2048, 1, 2048)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ckhy6"]
+material = ExtResource("5_4g5cr")
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -95,3 +99,7 @@ skeleton = NodePath("")
 
 [node name="Collision" type="CollisionShape3D" parent="World/Baseplate" unique_id=428454751]
 shape = SubResource("BoxShape3D_vnucn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World" unique_id=254005885]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0)
+mesh = SubResource("BoxMesh_ckhy6")

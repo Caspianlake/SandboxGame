@@ -1,3 +1,9 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://7uoy0fnilvfy"]
 
+[ext_resource type="Shader" uid="uid://cvw3fa40t4m4n" path="res://Scripts/Shaders/UniversalMaterial.gdshader" id="1_o8qsu"]
+
 [resource]
+render_priority = 0
+shader = ExtResource("1_o8qsu")
+shader_parameter/sharpness = 10.0
+shader_parameter/uv_scale = 0.5
