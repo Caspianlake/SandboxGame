@@ -4,9 +4,9 @@ extends Node
 @export_category("Generation Settings")
 @export var main_noise: FastNoiseLite = FastNoiseLite.new()
 
-func generate_chunk(chunk_size: Vector3i, chunk_key: Vector3i, block_size: int) -> void:
-	var chunk_data: Dictionary[Vector3i, int] = Dictionary()
-	var block_offset: Vector3i = chunk_key * block_size
+func generate_chunk(chunk_key: Vector3i, chunk_size: Vector3i, block_size: int) -> void:
+	var chunk_data: Dictionary[Vector3i, int] = {}
+	var block_offset: Vector3i = Vector3i(1,1,1)
 	
 	for bx in range(-1, chunk_size.x + 2):
 		for bz in range(-1, chunk_size.z + 2):
@@ -18,4 +18,4 @@ func generate_chunk(chunk_size: Vector3i, chunk_key: Vector3i, block_size: int) 
 				else:
 					chunk_data[Vector3i(bx,by,bz)] = 0
 	
-	
+	SignalBus.chunk_gen_ended.emit.call_deferred(chunk_key, chunk_data)
