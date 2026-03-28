@@ -37,9 +37,6 @@ size = Vector3(2048, 1, 2048)
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
 size = Vector3(2048, 1, 2048)
 
-[sub_resource type="BoxMesh" id="BoxMesh_c3mwy"]
-material = ExtResource("5_4g5cr")
-
 [node name="Root" type="Node" unique_id=1049021786]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1558499061]
@@ -101,7 +98,3 @@ skeleton = NodePath("")
 
 [node name="Collision" type="CollisionShape3D" parent="World/Baseplate" unique_id=428454751]
 shape = SubResource("BoxShape3D_vnucn")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World" unique_id=254005885]
-transform = Transform3D(104.62341, 0, 0, 0, 3.9369075, -61.983543, 0, 48.20491, 5.062212, 3, 2, -44.1616)
-mesh = SubResource("BoxMesh_c3mwy")
