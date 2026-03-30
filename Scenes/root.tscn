@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
 [ext_resource type="Script" uid="uid://dev35iofgrd2g" path="res://Scripts/Terrain/terrain_data_generator.gd" id="3_c3mwy"]
+[ext_resource type="Material" uid="uid://7uoy0fnilvfy" path="res://Resources/UniversalMaterial.tres" id="5_4g5cr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
 sky_top_color = Color(0.495, 0.69749993, 0.9, 1)
@@ -28,6 +29,10 @@ fog_density = 0.25
 fog_sky_affect = 0.0
 fog_depth_begin = 100.0
 fog_depth_end = 1000.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
+material = ExtResource("5_4g5cr")
+size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
 size = Vector3(2048, 1, 2048)
@@ -85,6 +90,11 @@ script = ExtResource("3_c3mwy")
 metadata/_custom_type_script = "uid://dev35iofgrd2g"
 
 [node name="Baseplate" type="StaticBody3D" parent="World" unique_id=1060089903]
+
+[node name="Mesh" type="MeshInstance3D" parent="World/Baseplate" unique_id=1933648101]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002302885, 0.0022683144, -0.0018882751)
+mesh = SubResource("BoxMesh_i04dx")
+skeleton = NodePath("")
 
 [node name="Collision" type="CollisionShape3D" parent="World/Baseplate" unique_id=428454751]
 shape = SubResource("BoxShape3D_vnucn")
