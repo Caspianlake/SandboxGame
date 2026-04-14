@@ -46,6 +46,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 # Handle physics updates
 func _physics_process(delta: float) -> void:
+	var speed_mul: float = SPEED
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -54,12 +56,11 @@ func _physics_process(delta: float) -> void:
 
 	var input_dir := Input.get_vector("Left", "Right", "Forward", "Backward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if is_on_floor():
-		if direction:
-			velocity.x = direction.x * SPEED
-			velocity.z = direction.z * SPEED
-		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-			velocity.z = move_toward(velocity.z, 0, SPEED)
+	if direction:
+		velocity.x = direction.x * speed_mul
+		velocity.z = direction.z * speed_mul
+	else:
+		velocity.x = move_toward(velocity.x, 0, speed_mul)
+		velocity.z = move_toward(velocity.z, 0, speed_mul)
 
 	move_and_slide()

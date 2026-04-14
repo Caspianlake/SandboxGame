@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
 [ext_resource type="Script" uid="uid://dev35iofgrd2g" path="res://Scripts/Terrain/terrain_data_generator.gd" id="3_c3mwy"]
-[ext_resource type="Material" uid="uid://7uoy0fnilvfy" path="res://Resources/UniversalMaterial.tres" id="5_4g5cr"]
+[ext_resource type="Material" uid="uid://btv8l2frxc743" path="res://Resources/test.tres" id="4_c3mwy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
 sky_top_color = Color(0.495, 0.69749993, 0.9, 1)
@@ -31,7 +31,7 @@ fog_depth_begin = 100.0
 fog_depth_end = 1000.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
-material = ExtResource("5_4g5cr")
+material = ExtResource("4_c3mwy")
 size = Vector3(2048, 1, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
@@ -40,13 +40,9 @@ size = Vector3(2048, 1, 2048)
 [node name="Root" type="Node" unique_id=1049021786]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1558499061]
-transform = Transform3D(0.7071067, 0.49999988, -0.49999994, 0, 0.70710665, 0.7071067, 0.7071067, -0.49999988, 0.49999994, 0, 0, 0)
+transform = Transform3D(0.70710677, 0.49999997, -0.49999988, 0, 0.70710677, 0.70710665, 0.70710677, -0.49999997, 0.49999988, 0, 0, 0)
 light_specular = 0.5
 shadow_enabled = true
-directional_shadow_split_1 = 0.02
-directional_shadow_split_2 = 0.1
-directional_shadow_split_3 = 0.25
-directional_shadow_max_distance = 500.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=12349684]
 environment = SubResource("Environment_8pvmw")
@@ -54,7 +50,7 @@ environment = SubResource("Environment_8pvmw")
 [node name="World" type="Node3D" parent="." unique_id=1153646104]
 
 [node name="Player" parent="World" unique_id=813497303 instance=ExtResource("2_8pvmw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9188666, 0)
 
 [node name="PlayerGUI" type="Control" parent="World/Player" unique_id=538000146]
 layout_mode = 3

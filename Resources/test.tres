@@ -1,3 +1,14 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://btv8l2frxc743"]
 
+[ext_resource type="Texture2D" uid="uid://drm08yle4x4h5" path="res://Assets/Materials/albedo/grass1.png" id="1_x2hs3"]
+[ext_resource type="Texture2D" uid="uid://dlrrlk0mywx5j" path="res://Assets/Materials/normal/grass1.png" id="2_djgqi"]
+[ext_resource type="Texture2D" uid="uid://utwjx60mx4x3" path="res://Assets/Materials/orm/grass1.png" id="3_h2jk1"]
+
 [resource]
+albedo_texture = ExtResource("1_x2hs3")
+roughness_texture = ExtResource("3_h2jk1")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_texture = ExtResource("2_djgqi")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
