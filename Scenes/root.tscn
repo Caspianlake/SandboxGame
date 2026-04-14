@@ -3,7 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://bt4oj2scg0mkd" path="res://Scenes/character.tscn" id="2_8pvmw"]
 [ext_resource type="Script" uid="uid://bp6b75fni478f" path="res://Scripts/Terrain/terrain.gd" id="2_vnucn"]
 [ext_resource type="Script" uid="uid://dev35iofgrd2g" path="res://Scripts/Terrain/terrain_data_generator.gd" id="3_c3mwy"]
-[ext_resource type="Material" uid="uid://btv8l2frxc743" path="res://Resources/test.tres" id="4_c3mwy"]
+[ext_resource type="Material" uid="uid://7uoy0fnilvfy" path="res://Resources/UniversalMaterial.tres" id="5_ckhy6"]
+[ext_resource type="Shader" uid="uid://cvw3fa40t4m4n" path="res://Scripts/Shaders/UniversalMaterial.gdshader" id="5_r3lo5"]
+[ext_resource type="Texture2DArray" uid="uid://da4vgxgqrklrw" path="res://Assets/Materials/baked_arrays/albedo_array.res" id="6_qtxxq"]
+[ext_resource type="Texture2DArray" uid="uid://bpl8hng0swwji" path="res://Assets/Materials/baked_arrays/normal_array.res" id="7_8fnbn"]
+[ext_resource type="Texture2DArray" uid="uid://daf311d52s5pd" path="res://Assets/Materials/baked_arrays/orm_array.res" id="8_a6f85"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vnucn"]
 sky_top_color = Color(0.495, 0.69749993, 0.9, 1)
@@ -21,7 +25,9 @@ ambient_light_source = 2
 ambient_light_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
 ambient_light_sky_contribution = 0.45
 ambient_light_energy = 0.5
+ssr_enabled = true
 ssao_enabled = true
+sdfgi_read_sky_light = false
 fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(0.5, 0.5, 0.5, 1)
@@ -31,11 +37,30 @@ fog_depth_begin = 100.0
 fog_depth_end = 1000.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_i04dx"]
-material = ExtResource("4_c3mwy")
-size = Vector3(2048, 1, 2048)
+material = ExtResource("5_ckhy6")
+size = Vector3(2048, 200, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
 size = Vector3(2048, 1, 2048)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dun2r"]
+size = Vector3(100, 2, 100)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fu36u"]
+render_priority = 0
+shader = ExtResource("5_r3lo5")
+shader_parameter/texture_albedo = ExtResource("6_qtxxq")
+shader_parameter/texture_normal = ExtResource("7_8fnbn")
+shader_parameter/texture_orm = ExtResource("8_a6f85")
+shader_parameter/layer_index = 1.0
+shader_parameter/triplanar_scale = 1.0
+shader_parameter/triplanar_sharpness = 10.0
+shader_parameter/triplanar_offset = Vector3(0, 0, 0)
+shader_parameter/metallic = 0.0
+shader_parameter/ao_light_affect = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r3lo5"]
+size = Vector3(100, 2, 100)
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -50,7 +75,7 @@ environment = SubResource("Environment_8pvmw")
 [node name="World" type="Node3D" parent="." unique_id=1153646104]
 
 [node name="Player" parent="World" unique_id=813497303 instance=ExtResource("2_8pvmw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9188666, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 5.4173822, 0)
 
 [node name="PlayerGUI" type="Control" parent="World/Player" unique_id=538000146]
 layout_mode = 3
@@ -86,11 +111,22 @@ script = ExtResource("3_c3mwy")
 metadata/_custom_type_script = "uid://dev35iofgrd2g"
 
 [node name="Baseplate" type="StaticBody3D" parent="World" unique_id=1060089903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -100, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="World/Baseplate" unique_id=1933648101]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002302885, 0.0022683144, -0.0018882751)
 mesh = SubResource("BoxMesh_i04dx")
 skeleton = NodePath("")
 
 [node name="Collision" type="CollisionShape3D" parent="World/Baseplate" unique_id=428454751]
 shape = SubResource("BoxShape3D_vnucn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=66667541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_dun2r")
+surface_material_override/0 = SubResource("ShaderMaterial_fu36u")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=2053220706]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" unique_id=1370658467]
+shape = SubResource("BoxShape3D_r3lo5")
+debug_fill = false
