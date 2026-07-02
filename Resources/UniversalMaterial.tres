@@ -1,9 +1,9 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://7uoy0fnilvfy"]
 
 [ext_resource type="Shader" uid="uid://cvw3fa40t4m4n" path="res://Scripts/Shaders/UniversalMaterial.gdshader" id="1_o8qsu"]
-[ext_resource type="Texture2DArray" uid="uid://da4vgxgqrklrw" path="res://Assets/Materials/baked_arrays/albedo_array.res" id="2_0gdq5"]
-[ext_resource type="Texture2DArray" uid="uid://bpl8hng0swwji" path="res://Assets/Materials/baked_arrays/normal_array.res" id="3_lggea"]
-[ext_resource type="Texture2DArray" uid="uid://daf311d52s5pd" path="res://Assets/Materials/baked_arrays/orm_array.res" id="4_1ckfg"]
+[ext_resource type="Texture2DArray" uid="uid://bopochjp6lafm" path="res://Resources/albedo_array.res" id="2_0gdq5"]
+[ext_resource type="Texture2DArray" uid="uid://dnn762pcjynx6" path="res://Resources/normal_array.res" id="3_lggea"]
+[ext_resource type="Texture2DArray" uid="uid://cml7vyg3xcu4w" path="res://Resources/orm_array.res" id="4_1ckfg"]
 
 [resource]
 render_priority = 0
