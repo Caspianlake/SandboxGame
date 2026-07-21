@@ -12,7 +12,6 @@ uniform float lut_size = 512.0;
 uniform float triplanar_scale = 1.0;
 uniform float triplanar_sharpness = 4.0;
 
-// Overrides
 uniform bool use_override_tint = false;
 uniform vec3 override_tint : source_color = vec3(1.0);
 
@@ -42,8 +41,13 @@ void vertex() {
     v_material_id = r | (g << uint(8)) | (b << uint(16));
 }
 
-void fragment() {
+vec3 blend_rnm(vec3 base_normal, vec3 detail_normal) {
+    vec3 t = base_normal + vec3(0.0, 0.0, 1.0);
+    vec3 u = detail_normal * vec3(-1.0, -1.0, 1.0);
+    return normalize(t * dot(t, u) - u * t.z);
+}
 
+void fragment() {
     float id_f = float(v_material_id);
     float pixel_x = mod(id_f, lut_size);
     float pixel_y = floor(id_f / lut_size);
@@ -62,13 +66,16 @@ void fragment() {
         base_mat_id = override_base_id;
     }
     
-    vec3 blend = abs(v_normal);
+    vec3 triplanar_normal = normalize(v_normal);
+    vec3 axis_sign = sign(triplanar_normal);
+
+    vec3 blend = abs(triplanar_normal);
     blend = pow(blend, vec3(triplanar_sharpness));
-    blend /= dot(blend, vec3(1.0)); // Normalize
-    
-    vec2 uv_x = v_vertex.zy * triplanar_scale;
-    vec2 uv_y = v_vertex.xz * triplanar_scale;
-    vec2 uv_z = v_vertex.xy * triplanar_scale;
+    blend /= dot(blend, vec3(1.0)); 
+
+    vec2 uv_x = vec2(-v_vertex.z * axis_sign.x, v_vertex.y) * triplanar_scale;
+    vec2 uv_y = vec2(-v_vertex.x * axis_sign.y, v_vertex.z) * triplanar_scale;
+    vec2 uv_z = vec2( v_vertex.x * axis_sign.z, v_vertex.y) * triplanar_scale;
     
     vec3 albedo_x = texture(texture_albedo, vec3(uv_x, base_mat_id)).rgb;
     vec3 albedo_y = texture(texture_albedo, vec3(uv_y, base_mat_id)).rgb;
@@ -80,17 +87,45 @@ void fragment() {
     vec3 orm_z = texture(texture_orm, vec3(uv_z, base_mat_id)).rgb;
     vec3 orm_final = orm_x * blend.x + orm_y * blend.y + orm_z * blend.z;
     
-    vec3 normal_x = texture(texture_normal, vec3(uv_x, base_mat_id)).rgb * 2.0 - 1.0;
-    vec3 normal_y = texture(texture_normal, vec3(uv_y, base_mat_id)).rgb * 2.0 - 1.0;
-    vec3 normal_z = texture(texture_normal, vec3(uv_z, base_mat_id)).rgb * 2.0 - 1.0;
-    
-    normal_x.z *= sign(v_normal.x);
-    normal_y.z *= sign(v_normal.y);
-    normal_z.z *= sign(v_normal.z);
+    vec3 normal_x = normalize(texture(texture_normal, vec3(uv_x, base_mat_id)).rgb * 2.0 - 1.0);
+    vec3 normal_y = normalize(texture(texture_normal, vec3(uv_y, base_mat_id)).rgb * 2.0 - 1.0);
+    vec3 normal_z = normalize(texture(texture_normal, vec3(uv_z, base_mat_id)).rgb * 2.0 - 1.0);
 
-    vec3 normal_x_ws = vec3(normal_x.z, normal_x.y, normal_x.x);
-    vec3 normal_y_ws = vec3(normal_y.x, normal_y.z, normal_y.y);
-    vec3 normal_z_ws = vec3(normal_z.x, normal_z.y, normal_z.z);
+    vec3 base_normal_x = vec3(
+        -triplanar_normal.z * axis_sign.x,
+        triplanar_normal.y,
+        triplanar_normal.x * axis_sign.x
+    );
+    vec3 base_normal_y = vec3(
+        -triplanar_normal.x * axis_sign.y,
+        triplanar_normal.z,
+        triplanar_normal.y * axis_sign.y
+    );
+    vec3 base_normal_z = vec3(
+        triplanar_normal.x * axis_sign.z,
+        triplanar_normal.y,
+        triplanar_normal.z * axis_sign.z
+    );
+
+    normal_x = blend_rnm(base_normal_x, normal_x);
+    normal_y = blend_rnm(base_normal_y, normal_y);
+    normal_z = blend_rnm(base_normal_z, normal_z);
+    
+    vec3 normal_x_ws = vec3(
+        normal_x.z * axis_sign.x,
+        normal_x.y,
+        -normal_x.x * axis_sign.x
+    );
+    vec3 normal_y_ws = vec3(
+        -normal_y.x * axis_sign.y,
+        normal_y.z * axis_sign.y,
+        normal_y.y
+    );
+    vec3 normal_z_ws = vec3(
+        normal_z.x * axis_sign.z,
+        normal_z.y,
+        normal_z.z * axis_sign.z
+    );
     
     vec3 normal_final = normalize(normal_x_ws * blend.x + normal_y_ws * blend.y + normal_z_ws * blend.z);
 

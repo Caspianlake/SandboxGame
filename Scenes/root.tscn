@@ -72,29 +72,6 @@ environment = SubResource("Environment_8pvmw")
 [node name="Player" parent="World" unique_id=813497303 instance=ExtResource("2_8pvmw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
-[node name="PlayerGUI" type="Control" parent="World/Player" unique_id=538000146]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="World/Player/PlayerGUI" unique_id=93610065]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/margin_bottom = 10
-
 [node name="Terrain" type="Node3D" parent="World" unique_id=1542926871]
 script = ExtResource("2_vnucn")
 render_distance = 1
