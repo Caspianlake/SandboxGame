@@ -33,7 +33,6 @@ void vertex() {
     v_vertex = VERTEX * world_scale;
     v_normal = normalize(NORMAL);
     
-    // Decode the integer MaterialID from RGB
     uint r = uint(round(COLOR.r * 255.0));
     uint g = uint(round(COLOR.g * 255.0));
     uint b = uint(round(COLOR.b * 255.0));

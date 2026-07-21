@@ -52,10 +52,10 @@ shader_parameter/texture_orm = ExtResource("8_fu36u")
 shader_parameter/lut_size = 512.0
 shader_parameter/triplanar_scale = 0.50000002375
 shader_parameter/triplanar_sharpness = 10.0
-shader_parameter/use_override_tint = false
+shader_parameter/use_override_tint = true
 shader_parameter/override_tint = Color(1, 1, 1, 1)
 shader_parameter/use_override_base_id = true
-shader_parameter/override_base_id = 2.0
+shader_parameter/override_base_id = 11.0
 
 [node name="Root" type="Node" unique_id=1049021786]
 
@@ -92,6 +92,6 @@ skeleton = NodePath("")
 shape = SubResource("BoxShape3D_vnucn")
 
 [node name="3Dbenchy" type="MeshInstance3D" parent="." unique_id=1853041742]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1.0171584, 0, -1, -4.4461405e-08, -8, 0.5, -1.0320362e-07)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -7.568366, 1.6179996, -7.072501e-08)
 material_override = SubResource("ShaderMaterial_20eh2")
 mesh = ExtResource("9_lwnbm")
