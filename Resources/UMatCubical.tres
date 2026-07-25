@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c05shf0x3luw6"]
+
+[ext_resource type="Shader" uid="uid://d0w4wmce2dwi6" path="res://Scripts/Shaders/UniversalMaterial_Cubical.gdshader" id="1_4dwsu"]
+[ext_resource type="Texture2DArray" uid="uid://bopochjp6lafm" path="res://Resources/albedo_array.res" id="2_twtwu"]
+[ext_resource type="Texture2DArray" uid="uid://dnn762pcjynx6" path="res://Resources/normal_array.res" id="3_iy0v5"]
+[ext_resource type="Texture2DArray" uid="uid://cml7vyg3xcu4w" path="res://Resources/orm_array.res" id="4_r7n8t"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_4dwsu")
+shader_parameter/texture_albedo = ExtResource("2_twtwu")
+shader_parameter/texture_normal = ExtResource("3_iy0v5")
+shader_parameter/texture_orm = ExtResource("4_r7n8t")
+shader_parameter/lut_size = 512.0
+shader_parameter/cubical_scale = 1.0
+shader_parameter/blend_sharpness = 4.0
+shader_parameter/horizontal_grain = true
+shader_parameter/use_override_tint = false
+shader_parameter/override_tint = Color(1, 1, 1, 1)
+shader_parameter/use_override_base_id = true
+shader_parameter/override_base_id = 11.0
