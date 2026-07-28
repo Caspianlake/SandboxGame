@@ -55,7 +55,7 @@ void fragment() {
     
     vec3 tint = texture(material_tint_lut, lut_uv).rgb;
     vec2 base_id_data = texture(material_base_id_lut, lut_uv).rg;
-    
+	
     float base_mat_id = round(base_id_data.r * 255.0) + (round(base_id_data.g * 255.0) * 256.0);
     
     if (use_override_tint) {
