@@ -5,6 +5,7 @@ extends Node3D
 @export var new_noise: FastNoiseLite = FastNoiseLite.new()
 
 func _ready():
+	var t3d: Transform3D = Transform3D(Basis(), Vector3(0, -700, 0))
 	var main_mesh: BoxMesh = BoxMesh.new()
 	main_mesh.size = Vector3(1,512,1)
 	main_mesh.surface_set_material(0,load("res://Resources/UniversalMaterial.tres"))
@@ -24,7 +25,7 @@ func _ready():
 			for x in range(0,grid_size):
 				for z in range(0, grid_size):
 					var height = floorf(remap(new_noise.get_noise_2d(fX + x,fZ + z),-1.0,1.0,1.0,512.0))
-					new_multimesh.set_instance_transform(x*grid_size + z, Transform3D(Basis(), Vector3(fX + x, height-700, fZ + z)))
+					new_multimesh.set_instance_transform(x*grid_size + z, t3d)
 			
 			var mmi = MultiMeshInstance3D.new()
 			mmi.multimesh = new_multimesh
