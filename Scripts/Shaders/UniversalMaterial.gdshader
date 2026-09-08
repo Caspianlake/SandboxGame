@@ -138,7 +138,7 @@ void fragment() {
 
     ALBEDO = albedo_final;
     NORMAL = normal_view;
-    AO = orm_final.r;
+    AO = 1.0;
     ROUGHNESS = orm_final.g;
     METALLIC = orm_final.b;
 }
