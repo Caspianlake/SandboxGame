@@ -1,0 +1,37 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://efsrf0x1r6kg"]
+
+[ext_resource type="Shader" uid="uid://c0pwef5mc2bot" path="res://Scripts/Shaders/WaterMaterial.gdshader" id="1_6fivj"]
+
+[sub_resource type="Gradient" id="Gradient_2mc6k"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0.4833331, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5mb31"]
+frequency = 0.815
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xeeh1"]
+noise = SubResource("FastNoiseLite_5mb31")
+color_ramp = SubResource("Gradient_2mc6k")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vbk60"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jvpvk"]
+noise = SubResource("FastNoiseLite_vbk60")
+in_3d_space = true
+as_normal_map = true
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_6fivj")
+shader_parameter/normal_map = SubResource("NoiseTexture2D_jvpvk")
+shader_parameter/base_texture = SubResource("NoiseTexture2D_xeeh1")
+shader_parameter/water_color = Color(0.1, 0.3, 0.4, 1)
+shader_parameter/deep_color = Color(0, 0.05, 0.1, 1)
+shader_parameter/fog_start = 0.5
+shader_parameter/fog_end = 10.0
+shader_parameter/wave_speed = 0.3
+shader_parameter/wave_strength = 0.05
+shader_parameter/flow_strength = 0.0
+shader_parameter/refraction_strength = 0.0
+shader_parameter/reflectivity = 0.0
+shader_parameter/roughness_val = 0.05

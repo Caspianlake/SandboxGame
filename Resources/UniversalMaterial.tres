@@ -17,4 +17,4 @@ shader_parameter/triplanar_sharpness = 10.0
 shader_parameter/use_override_tint = false
 shader_parameter/override_tint = Color(1, 1, 1, 1)
 shader_parameter/use_override_base_id = true
-shader_parameter/override_base_id = 0.0
+shader_parameter/override_base_id = 6.0
