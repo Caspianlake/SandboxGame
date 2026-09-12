@@ -8,16 +8,14 @@ extends Node3D
 var chunk_list: Dictionary[Vector3i, Chunk] = {}
 
 var player: CharacterBody3D
-var player_last_ck: Vector3i = Vector3i(0,0,0)
+var player_last_ck: Vector3i
 
 var chunk_side_size: float = float(chunk_size.x)
 
 func _ready() -> void:
-	player = get_parent().find_child("Player")
-	terrain_process(player_last_ck)
-	
 	SignalBus.chunk_gen_ended.connect(on_chunk_gen_ended)
 	SignalBus.meshing_ended.connect(on_chunk_mesh_ended)
+	player = get_parent().find_child("Player")
 
 func chunk_load(chunk_key: Vector3i) -> void:
 	var chunk: Chunk = chunk_list[chunk_key]
@@ -54,7 +52,7 @@ func activate(chunk_key: Vector3i) -> void:
 func _process(_delta: float) -> void:
 	if player:
 		var player_ck: Vector3i = TerrainUtil.get_player_chunk(player.position,chunk_size,block_size)
-		if player_last_ck != player_ck:
+		if player_last_ck != player_ck or not player_last_ck:
 			terrain_process(player_ck)
 		player_last_ck = player_ck
 
@@ -74,6 +72,7 @@ func on_chunk_gen_ended(chunk_key: Vector3i, block_data: Dictionary[Vector3i, in
 func on_chunk_mesh_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
 	chunk_list[chunk_key].mesh = chunk_mesh
 	chunk_list[chunk_key].status = "unloaded"
+	reload()
 
 class Chunk:
 	var active: bool = false
