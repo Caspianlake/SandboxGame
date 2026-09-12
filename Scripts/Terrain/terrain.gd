@@ -47,6 +47,7 @@ func activate(chunk_key: Vector3i) -> void:
 		chunk_list[chunk_key].active = true
 	else:
 		chunk_list[chunk_key] = Chunk.new()
+		chunk_list[chunk_key].active = true
 		ThreadPool.add_task($TerrainDataGenerator.generate_chunk.bind(chunk_key))
 
 func _process(_delta: float) -> void:
