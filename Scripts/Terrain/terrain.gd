@@ -8,17 +8,37 @@ extends Node3D
 var chunk_list: Dictionary[Vector3i, Chunk] = {}
 
 var player: CharacterBody3D
-var player_last_ck: Vector3i
+var player_last_ck: Vector3i = Vector3i(0,0,0)
+
+var chunk_side_size: float = float(chunk_size.x)
 
 func _ready() -> void:
 	player = get_parent().find_child("Player")
+	terrain_process(player_last_ck)
 	
 	SignalBus.chunk_gen_ended.connect(on_chunk_gen_ended)
 	SignalBus.meshing_ended.connect(on_chunk_mesh_ended)
 
+func chunk_load(chunk_key: Vector3i) -> void:
+	var chunk: Chunk = chunk_list[chunk_key]
+	chunk.instance = MeshInstance3D.new()
+	chunk.instance.mesh = chunk.mesh
+	chunk.instance.position = Vector3(chunk_key.x*chunk_side_size*block_size,0,chunk_key.z*chunk_side_size*block_size)
+	$Chunks.add_child(chunk.instance)
+	chunk.status = "loaded"
+
+func chunk_unload(chunk: Chunk) -> void:
+	chunk.instance.queue_free()
+	chunk.instance = null
+	chunk.status = "unloaded"
+
 func reload() -> void:
 	for chunk in chunk_list:
-		pass
+		var current_chunk: Chunk = chunk_list[chunk]
+		if current_chunk.active and current_chunk.status == "unloaded":
+			chunk_load(chunk)
+		elif current_chunk.active != true and current_chunk.status == "loaded":
+			chunk_unload(current_chunk)
 		
 func deactivate() -> void:
 	for ck in chunk_list:
@@ -43,6 +63,7 @@ func terrain_process(player_ck: Vector3i) -> void:
 	for cx in range(-render_distance, render_distance + 1):
 		for cz in range (-render_distance, render_distance + 1):
 			activate(Vector3i(player_ck.x + cx,0,player_ck.z + cz))
+	reload()
 
 func on_chunk_gen_ended(chunk_key: Vector3i, block_data: Dictionary[Vector3i, int]) -> void:
 	chunk_list[chunk_key].block_data = block_data
@@ -59,3 +80,4 @@ class Chunk:
 	var status: String = "incomplete"
 	var block_data: Dictionary[Vector3i, int]
 	var mesh: Mesh
+	var instance: MeshInstance3D
