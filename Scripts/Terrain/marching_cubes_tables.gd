@@ -1,3 +1,4 @@
+class_name MCTables
 extends Resource
 
 static var triangulations: Array[Array] = [

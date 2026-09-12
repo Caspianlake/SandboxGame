@@ -1,11 +1,9 @@
 extends Node
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func mesh_chunk(chunk_key: Vector3i, block_data: Dictionary[Vector3i, int]) -> void:
+	
+	var chunk_size: Vector3i = get_parent().chunk_size
+	var block_size: int = get_parent().block_size 
+	var new_mesh = BoxMesh.new()
+	
+	SignalBus.meshing_ended.emit.call_deferred(chunk_key,new_mesh)

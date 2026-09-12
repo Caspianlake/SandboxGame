@@ -14,6 +14,22 @@ func _ready() -> void:
 	player = get_parent().find_child("Player")
 	
 	SignalBus.chunk_gen_ended.connect(on_chunk_gen_ended)
+	SignalBus.meshing_ended.connect(on_chunk_mesh_ended)
+
+func reload() -> void:
+	for chunk in chunk_list:
+		pass
+		
+func deactivate() -> void:
+	for ck in chunk_list:
+		chunk_list[ck].active = false
+
+func activate(chunk_key: Vector3i) -> void:
+	if chunk_list.has(chunk_key):
+		chunk_list[chunk_key].active = true
+	else:
+		chunk_list[chunk_key] = Chunk.new()
+		ThreadPool.add_task($TerrainDataGenerator.generate_chunk.bind(chunk_key))
 
 func _process(_delta: float) -> void:
 	if player:
@@ -28,22 +44,18 @@ func terrain_process(player_ck: Vector3i) -> void:
 		for cz in range (-render_distance, render_distance + 1):
 			activate(Vector3i(player_ck.x + cx,0,player_ck.z + cz))
 
-func deactivate() -> void:
-	for ck in chunk_list:
-		chunk_list[ck].active = false
-
-func activate(chunk_key: Vector3i) -> void:
-	if chunk_list.has(chunk_key):
-		chunk_list[chunk_key].active = true
-	else:
-		chunk_list[chunk_key] = Chunk.new()
-		ThreadPool.add_task($TerrainDataGenerator.generate_chunk.bind(chunk_key,chunk_size,block_size))
-
 func on_chunk_gen_ended(chunk_key: Vector3i, block_data: Dictionary[Vector3i, int]) -> void:
 	chunk_list[chunk_key].block_data = block_data
 	chunk_list[chunk_key].status = "unmeshed"
+	ThreadPool.add_task($TerrainMesher.mesh_chunk.bind(chunk_key, block_data))
+	
+
+func on_chunk_mesh_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
+	chunk_list[chunk_key].mesh = chunk_mesh
+	chunk_list[chunk_key].status = "unloaded"
 
 class Chunk:
 	var active: bool = false
 	var status: String = "incomplete"
 	var block_data: Dictionary[Vector3i, int]
+	var mesh: Mesh
