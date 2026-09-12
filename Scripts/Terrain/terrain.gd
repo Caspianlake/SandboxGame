@@ -1,9 +1,9 @@
 extends Node3D 
 
 @export_category("Terrain")
-@export var render_distance: int = 5 
-@export var chunk_size: Vector3i = Vector3i(16,256,16)
-@export var block_size: int = 1
+@export var render_distance: int = 3 
+@export var chunk_size: Vector3i = Vector3i(32,512,32)
+@export var block_size: float = 0.5
 
 var chunk_list: Dictionary[Vector3i, Chunk] = {}
 
@@ -41,7 +41,7 @@ func activate(chunk_key: Vector3i) -> void:
 
 func on_chunk_gen_ended(chunk_key: Vector3i, block_data: Dictionary[Vector3i, int]) -> void:
 	chunk_list[chunk_key].block_data = block_data
-	chunk_list[chunk_key].status = "unloaded"
+	chunk_list[chunk_key].status = "unmeshed"
 
 class Chunk:
 	var active: bool = false

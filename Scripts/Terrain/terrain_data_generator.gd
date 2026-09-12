@@ -6,7 +6,7 @@ extends Node
 
 func generate_chunk(chunk_key: Vector3i, chunk_size: Vector3i, block_size: int) -> void:
 	var chunk_data: Dictionary[Vector3i, int] = {}
-	var block_offset: Vector3i = Vector3i(1,1,1)
+	var block_offset: Vector3i = Vector3i(block_size,block_size,block_size)
 	
 	for bx in range(-1, chunk_size.x + 2):
 		for bz in range(-1, chunk_size.z + 2):

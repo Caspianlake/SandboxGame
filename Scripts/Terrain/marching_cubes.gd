@@ -1,7 +1,6 @@
-class_name MarchingCubes
 extends RefCounted
 
-static var MARCHING_CUBES_TABLES = preload("res://Scripts/Terrain/marchingcubes_tables.gd")
+static var MARCHING_CUBES_TABLES = preload("res://Scripts/Terrain/marching_cubes_tables.gd")
 
 ## Generates a mesh from SDF data using marching cubes algorithm.
 ## sdf_grid: Flattened 3D array (X Z Y order).
