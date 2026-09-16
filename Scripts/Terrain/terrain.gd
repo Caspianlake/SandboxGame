@@ -20,6 +20,7 @@ func _ready() -> void:
 func chunk_load(chunk_key: Vector3i) -> void:
 	var chunk: Chunk = chunk_list[chunk_key]
 	chunk.instance = MeshInstance3D.new()
+	chunk.instance.material_override = load("res://Resources/UniversalMaterial.tres")
 	chunk.instance.mesh = chunk.mesh
 	chunk.instance.position = Vector3(chunk_key.x*chunk_side_size*block_size,0,chunk_key.z*chunk_side_size*block_size)
 	$Chunks.add_child(chunk.instance)
@@ -64,7 +65,7 @@ func terrain_process(player_ck: Vector3i) -> void:
 			activate(Vector3i(player_ck.x + cx,0,player_ck.z + cz))
 	reload()
 
-func on_chunk_gen_ended(chunk_key: Vector3i, block_data: Dictionary[Vector3i, int]) -> void:
+func on_chunk_gen_ended(chunk_key: Vector3i, block_data: Dictionary[Vector3i, float]) -> void:
 	chunk_list[chunk_key].block_data = block_data
 	chunk_list[chunk_key].status = "unmeshed"
 	ThreadPool.add_task($TerrainMesher.mesh_chunk.bind(chunk_key, block_data))
@@ -78,6 +79,6 @@ func on_chunk_mesh_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
 class Chunk:
 	var active: bool = false
 	var status: String = "incomplete"
-	var block_data: Dictionary[Vector3i, int]
+	var block_data: Dictionary[Vector3i, float]
 	var mesh: Mesh
 	var instance: MeshInstance3D

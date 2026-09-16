@@ -1,9 +1,9 @@
 extends Node
 
-func mesh_chunk(chunk_key: Vector3i, block_data: Dictionary[Vector3i, int]) -> void:
+func mesh_chunk(chunk_key: Vector3i, block_data: Dictionary[Vector3i, float]) -> void:
 	
 	var chunk_size: Vector3i = get_parent().chunk_size
-	var block_size: int = get_parent().block_size 
+	var block_size: float = get_parent().block_size 
 	
 	var new_mesh: ArrayMesh = MarchingCubes.generate_mesh(block_data,chunk_size,block_size)
 	
