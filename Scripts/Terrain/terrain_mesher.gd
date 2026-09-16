@@ -4,7 +4,9 @@ func mesh_chunk(chunk_key: Vector3i, block_data: Dictionary[Vector3i, int]) -> v
 	
 	var chunk_size: Vector3i = get_parent().chunk_size
 	var block_size: int = get_parent().block_size 
-	var new_mesh = BoxMesh.new()
-	new_mesh.size = Vector3(15.9,1,15.9)
+	
+	var new_mesh: ArrayMesh = MarchingCubes.generate_mesh(block_data,chunk_size,block_size)
+	
+	
 	
 	SignalBus.meshing_ended.emit.call_deferred(chunk_key,new_mesh)
