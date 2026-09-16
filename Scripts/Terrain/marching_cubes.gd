@@ -1,6 +1,8 @@
 extends Resource
 class_name MarchingCubes
 
+static var flat_shading: bool = true
+
 static func generate_mesh(block_data: Dictionary[Vector3i, float], chunk_size: Vector3i, block_size: float) -> ArrayMesh:
 	
 	var vertices: PackedVector3Array = PackedVector3Array()
@@ -22,12 +24,23 @@ static func generate_mesh(block_data: Dictionary[Vector3i, float], chunk_size: V
 					var position: Vector3 = calculate_interpolation(pos_a,pos_b, block_data)
 					position *= Vector3(block_size,block_size,block_size)
 					
-					var normal: Vector3 = calculate_normal(pos_a, pos_b, block_data)
-					
 					vertices.append(position)
-					colors.append(Color8(1,0,0))
+					if randi_range(0,1) == 1:
+						colors.append(Color8(1,0,0))
+					else:
+						colors.append(Color8(2,0,0))
 					
-					normals.append(normal)
+					if not flat_shading:
+						var normal: Vector3 = calculate_normal(pos_a, pos_b, block_data)
+						normals.append(normal)
+					elif vertices.size() % 3 == 0:
+						var v0 = vertices[vertices.size() - 3]
+						var v1 = vertices[vertices.size() - 2]
+						var v2 = vertices[vertices.size() - 1]
+						var face_normal = (v2 - v0).cross(v1 - v0).normalized()
+						normals.append(face_normal)
+						normals.append(face_normal)
+						normals.append(face_normal)
 	
 	
 	
