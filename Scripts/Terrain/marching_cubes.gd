@@ -3,7 +3,7 @@ class_name MarchingCubes
 
 static var flat_shading: bool = true
 
-static func generate_mesh(block_data: Dictionary[Vector3i, float], chunk_size: Vector3i, block_size: float) -> ArrayMesh:
+static func generate_mesh(chunk_data: Dictionary[Vector3i, float], chunk_size: Vector3i, block_size: float, block_data: Dictionary[Vector3i, int]) -> ArrayMesh:
 	
 	var vertices: PackedVector3Array = PackedVector3Array()
 	var normals: PackedVector3Array = PackedVector3Array()
@@ -12,7 +12,7 @@ static func generate_mesh(block_data: Dictionary[Vector3i, float], chunk_size: V
 	for x in range(0, chunk_size.x):
 		for y in range(0,chunk_size.y):
 			for z in range(0, chunk_size.z):
-				var tri_table: Array = get_triangulation(x,y,z,block_data)
+				var tri_table: Array = get_triangulation(x,y,z,chunk_data)
 				for edge_index in tri_table:
 					if edge_index < 0: break
 					var point_indices = MCTables.edges[edge_index]
@@ -21,17 +21,22 @@ static func generate_mesh(block_data: Dictionary[Vector3i, float], chunk_size: V
 					var pos_a: = Vector3i(x+p0.x, y+p0.y, z+p0.z)
 					var pos_b: = Vector3i(x+p1.x, y+p1.y, z+p1.z)
 					
-					var position: Vector3 = calculate_interpolation(pos_a,pos_b, block_data)
+					var position: Vector3 = calculate_interpolation(pos_a,pos_b, chunk_data)
 					position *= Vector3(block_size,block_size,block_size)
 					
 					vertices.append(position)
-					if randi_range(0,1) == 1:
-						colors.append(Color8(1,0,0))
-					else:
-						colors.append(Color8(2,0,0))
+					var val_a: float = chunk_data.get(pos_a, -1.0)
+					var val_b: float = chunk_data.get(pos_b, -1.0)
+
+					# Select the corner that contains solid geometry
+					var solid_pos: Vector3i = pos_a if val_a >= 0.0 else pos_b
+					var block_id: int = block_data.get(solid_pos, 0)
+
+					# Store the integer ID in the Red channel
+					colors.append(Color.from_rgba8(block_id,0,0))
 					
 					if not flat_shading:
-						var normal: Vector3 = calculate_normal(pos_a, pos_b, block_data)
+						var normal: Vector3 = calculate_normal(pos_a, pos_b, chunk_data)
 						normals.append(normal)
 					elif vertices.size() % 3 == 0:
 						var v0 = vertices[vertices.size() - 3]
@@ -41,8 +46,6 @@ static func generate_mesh(block_data: Dictionary[Vector3i, float], chunk_size: V
 						normals.append(face_normal)
 						normals.append(face_normal)
 						normals.append(face_normal)
-	
-	
 	
 	var arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -54,9 +57,9 @@ static func generate_mesh(block_data: Dictionary[Vector3i, float], chunk_size: V
 		FinalMesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
 	return FinalMesh
 
-static func calculate_interpolation(a:Vector3i, b:Vector3i, block_data: Dictionary[Vector3i, float]) -> Vector3:
-	var val_a = block_data[Vector3i(a.x,a.y,a.z)]
-	var val_b = block_data[Vector3i(b.x,b.y,b.z)]
+static func calculate_interpolation(a:Vector3i, b:Vector3i, chunk_data: Dictionary[Vector3i, float]) -> Vector3:
+	var val_a = chunk_data[Vector3i(a.x,a.y,a.z)]
+	var val_b = chunk_data[Vector3i(b.x,b.y,b.z)]
 	
 	var fa = Vector3(a)
 	var fb = Vector3(b)
@@ -64,34 +67,34 @@ static func calculate_interpolation(a:Vector3i, b:Vector3i, block_data: Dictiona
 	var t = (0 - val_a)/(val_b-val_a)
 	return fa+t*(fb-fa)
 
-static func calculate_normal(a:Vector3i, b:Vector3i, block_data: Dictionary[Vector3i, float]) -> Vector3:
+static func calculate_normal(a:Vector3i, b:Vector3i, chunk_data: Dictionary[Vector3i, float]) -> Vector3:
 	var grad_a = Vector3(
-		block_data.get(a + Vector3i(1, 0, 0), 0.0) - block_data.get(a - Vector3i(1, 0, 0), 0.0),
-		block_data.get(a + Vector3i(0, 1, 0), 0.0) - block_data.get(a - Vector3i(0, 1, 0), 0.0),
-		block_data.get(a + Vector3i(0, 0, 1), 0.0) - block_data.get(a - Vector3i(0, 0, 1), 0.0)
+		chunk_data.get(a + Vector3i(1, 0, 0), 0.0) - chunk_data.get(a - Vector3i(1, 0, 0), 0.0),
+		chunk_data.get(a + Vector3i(0, 1, 0), 0.0) - chunk_data.get(a - Vector3i(0, 1, 0), 0.0),
+		chunk_data.get(a + Vector3i(0, 0, 1), 0.0) - chunk_data.get(a - Vector3i(0, 0, 1), 0.0)
 	)
 	var grad_b = Vector3(
-		block_data.get(b + Vector3i(1, 0, 0), 0.0) - block_data.get(b - Vector3i(1, 0, 0), 0.0),
-		block_data.get(b + Vector3i(0, 1, 0), 0.0) - block_data.get(b - Vector3i(0, 1, 0), 0.0),
-		block_data.get(b + Vector3i(0, 0, 1), 0.0) - block_data.get(b - Vector3i(0, 0, 1), 0.0)
+		chunk_data.get(b + Vector3i(1, 0, 0), 0.0) - chunk_data.get(b - Vector3i(1, 0, 0), 0.0),
+		chunk_data.get(b + Vector3i(0, 1, 0), 0.0) - chunk_data.get(b - Vector3i(0, 1, 0), 0.0),
+		chunk_data.get(b + Vector3i(0, 0, 1), 0.0) - chunk_data.get(b - Vector3i(0, 0, 1), 0.0)
 	)
 	
-	var val_a = block_data[a]
-	var val_b = block_data[b]
+	var val_a = chunk_data[a]
+	var val_b = chunk_data[b]
 	
 	var t = (0.0 - val_a) / (val_b - val_a) if val_b != val_a else 0.5
 	var normal = -grad_a.lerp(grad_b, t)
 	
 	return normal.normalized() if normal.length_squared() > 0.0 else Vector3.UP
 
-static func get_triangulation(x:int, y:int, z:int,block_data: Dictionary[Vector3i, float]) -> Array:
+static func get_triangulation(x:int, y:int, z:int,chunk_data: Dictionary[Vector3i, float]) -> Array:
 	var idx = 0b00000000
-	idx |= int(block_data[Vector3i(x,y,z)] >= 0)<<0
-	idx |= int(block_data[Vector3i(x,y,z+1)] >= 0)<<1
-	idx |= int(block_data[Vector3i(x+1,y,z+1)] >= 0)<<2
-	idx |= int(block_data[Vector3i(x+1,y,z)] >= 0)<<3
-	idx |= int(block_data[Vector3i(x,y+1,z)] >= 0)<<4
-	idx |= int(block_data[Vector3i(x,y+1,z+1)] >= 0)<<5
-	idx |= int(block_data[Vector3i(x+1,y+1,z+1)] >= 0)<<6
-	idx |= int(block_data[Vector3i(x+1,y+1,z)] >= 0)<<7
+	idx |= int(chunk_data[Vector3i(x,y,z)] >= 0)<<0
+	idx |= int(chunk_data[Vector3i(x,y,z+1)] >= 0)<<1
+	idx |= int(chunk_data[Vector3i(x+1,y,z+1)] >= 0)<<2
+	idx |= int(chunk_data[Vector3i(x+1,y,z)] >= 0)<<3
+	idx |= int(chunk_data[Vector3i(x,y+1,z)] >= 0)<<4
+	idx |= int(chunk_data[Vector3i(x,y+1,z+1)] >= 0)<<5
+	idx |= int(chunk_data[Vector3i(x+1,y+1,z+1)] >= 0)<<6
+	idx |= int(chunk_data[Vector3i(x+1,y+1,z)] >= 0)<<7
 	return MCTables.triangulations[idx]

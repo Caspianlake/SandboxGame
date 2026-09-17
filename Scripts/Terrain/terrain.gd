@@ -65,10 +65,11 @@ func terrain_process(player_ck: Vector3i) -> void:
 			activate(Vector3i(player_ck.x + cx,0,player_ck.z + cz))
 	reload()
 
-func on_chunk_gen_ended(chunk_key: Vector3i, block_data: Dictionary[Vector3i, float]) -> void:
+func on_chunk_gen_ended(chunk_key: Vector3i, chunk_data: Dictionary[Vector3i, float], block_data: Dictionary[Vector3i, int]) -> void:
+	chunk_list[chunk_key].chunk_data = chunk_data
 	chunk_list[chunk_key].block_data = block_data
 	chunk_list[chunk_key].status = "unmeshed"
-	ThreadPool.add_task($TerrainMesher.mesh_chunk.bind(chunk_key, block_data))
+	ThreadPool.add_task($TerrainMesher.mesh_chunk.bind(chunk_key, chunk_data, block_data))
 	
 
 func on_chunk_mesh_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
@@ -79,6 +80,7 @@ func on_chunk_mesh_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
 class Chunk:
 	var active: bool = false
 	var status: String = "incomplete"
-	var block_data: Dictionary[Vector3i, float]
+	var chunk_data: Dictionary[Vector3i, float]
+	var block_data: Dictionary[Vector3i, int]
 	var mesh: Mesh
 	var instance: MeshInstance3D

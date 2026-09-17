@@ -15,15 +15,20 @@
 [ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="21_8p807"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_lwnbm"]
-noise_type = 2
-frequency = 0.0027
+frequency = 0.001
 fractal_type = 3
 
 [sub_resource type="Curve" id="Curve_lwnbm"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 1, Vector2(0.5049801, 0), 0.0, 2.3457937, 1, 1, Vector2(0.931275, 1), 2.3457937, 0.0, 1, 0]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(0.5, 0.5), 1.0, 1.0, 1, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vnucn"]
+size = Vector3(10000, 1, 10000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lwnbm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_g4v7s"]
+material = SubResource("StandardMaterial3D_lwnbm")
 size = Vector3(10000, 1, 10000)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vdqvo"]
@@ -78,8 +83,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.7051852, 0.7051852)
-shader_parameter/cirrus_position2 = Vector2(0.7051852, 0.7051852)
+shader_parameter/cirrus_position1 = Vector2(0.79850614, 0.79850614)
+shader_parameter/cirrus_position2 = Vector2(0.79850614, 0.79850614)
 shader_parameter/cirrus_texture = ExtResource("13_teq3f")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -89,7 +94,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(73.46767, 73.46767)
+shader_parameter/cumulus_position = Vector2(39.114372, 39.114372)
 shader_parameter/cumulus_texture = ExtResource("14_capts")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -126,7 +131,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 [node name="Terrain" type="Node3D" parent="World" unique_id=1542926871]
 script = ExtResource("2_vnucn")
 render_distance = 12
-chunk_size = Vector3i(32, 128, 32)
+chunk_size = Vector3i(32, 256, 32)
 
 [node name="TerrainDataGenerator" type="Node" parent="World/Terrain" unique_id=1979561948]
 script = ExtResource("3_c3mwy")
@@ -143,6 +148,9 @@ script = ExtResource("4_lwnbm")
 
 [node name="Collision" type="CollisionShape3D" parent="World/Baseplate" unique_id=428454751]
 shape = SubResource("BoxShape3D_vnucn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Baseplate" unique_id=1757983713]
+mesh = SubResource("BoxMesh_g4v7s")
 
 [node name="Sky3D" type="WorldEnvironment" parent="." unique_id=1722117961]
 environment = SubResource("Environment_64fwa")
