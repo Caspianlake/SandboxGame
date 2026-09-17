@@ -27,7 +27,7 @@ func generate_chunk(chunk_key: Vector3i) -> void:
 			for by in range(-1, chunk_size.y + 2):
 				var fy: float = snappedf(float(by), step_f)
 				var raw_noise = main_noise.get_noise_3d(fx, fy, fz)
-				raw_noise = clamp(raw_noise - height_curve.sample(remap(fy,0.0,(chunk_size.y+2.0)/lod_step,0.0,1.0)),-1.0,1.0)
+				raw_noise = clamp(raw_noise - height_curve.sample(remap(by,0.0,(chunk_size.y+2.0),0.0,1.0)),-1.0,1.0)
 				var fsdf: float = 1.0 if raw_noise > 0.0  else -1.0
 				chunk_data[Vector3i(bx, by, bz)] = fsdf
 				if fy < 41:
