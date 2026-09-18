@@ -11,8 +11,8 @@ func generate_chunk(chunk_key: Vector3i) -> void:
 	
 	var chunk_size: Vector3i = get_parent().chunk_size
 	
-	var chunk_data: Dictionary[Vector3i, float] = {}
-	var block_data: Dictionary[Vector3i, int] = {}
+	var chunk_data: PackedFloat32Array = PackedFloat32Array()
+	var block_data: PackedInt32Array = PackedInt32Array()
 	var chunk_offset: Vector3i = Vector3i(chunk_size.x * chunk_key.x, chunk_size.y * chunk_key.y, chunk_size.z * chunk_key.z)
 	
 	var step_f: float = float(lod_step)
@@ -28,17 +28,22 @@ func generate_chunk(chunk_key: Vector3i) -> void:
 				var raw_noise = main_noise.get_noise_3d(fx, fy, fz)
 				raw_noise = clamp(raw_noise - height_curve.sample(remap(by,0.0,(chunk_size.y+2.0),0.0,1.0)),-1.0,1.0)
 				var fsdf: float = 1.0 if raw_noise > 0.0  else -1.0
-				chunk_data[Vector3i(bx, by, bz)] = fsdf
+				chunk_data.append(fsdf) 
+				
+				var block: int = 0
+				
 				if fy < 41:
-					block_data[Vector3i(bx,by,bz)] = 2
+					block = 2
 				elif fy < 47:
-					block_data[Vector3i(bx,by,bz)] = 3
+					block = 3
 				elif fy < 100:
-					block_data[Vector3i(bx,by,bz)] = 1
+					block = 1
 				elif fy < 112:
-					block_data[Vector3i(bx,by,bz)] = 2
+					block = 2
 				else: 
-					block_data[Vector3i(bx,by,bz)] = 4
+					block = 4
+				
+				block_data.append(block)
 
 	print("Chunk data generated in: " + str(Time.get_ticks_msec() - t))
 	SignalBus.chunk_gen_ended.emit.call_deferred(chunk_key, chunk_data, block_data)

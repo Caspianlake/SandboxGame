@@ -1,6 +1,6 @@
 extends Node
 
-func mesh_chunk(chunk_key: Vector3i, chunk_data: Dictionary[Vector3i, float], block_data: Dictionary[Vector3i, int]) -> void:
+func mesh_chunk(chunk_key: Vector3i, chunk_data: PackedFloat32Array, block_data: PackedInt32Array) -> void:
 	
 	var t = Time.get_ticks_msec()
 	
