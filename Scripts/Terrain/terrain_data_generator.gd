@@ -4,13 +4,12 @@ extends Node
 @export var main_noise: FastNoiseLite = FastNoiseLite.new()
 @export var height_curve: Curve = Curve.new()
 
-@export var lod_step: int = 2
+@export var lod_step: int = 1
 
 func generate_chunk(chunk_key: Vector3i) -> void:
 	var t = Time.get_ticks_msec()
 	
 	var chunk_size: Vector3i = get_parent().chunk_size
-	var block_size: float = get_parent().block_size 
 	
 	var chunk_data: Dictionary[Vector3i, float] = {}
 	var block_data: Dictionary[Vector3i, int] = {}

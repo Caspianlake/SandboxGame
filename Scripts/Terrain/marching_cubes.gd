@@ -31,7 +31,6 @@ static func generate_mesh(chunk_data: Dictionary[Vector3i, float], chunk_size: V
 					# Select the corner that contains solid geometry
 					var solid_pos: Vector3i = pos_a if val_a >= 0.0 else pos_b
 					var block_id: int = block_data.get(solid_pos, 0)
-
 					# Store the integer ID in the Red channel
 					colors.append(Color.from_rgba8(block_id,0,0))
 					
