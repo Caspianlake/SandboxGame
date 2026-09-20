@@ -10,12 +10,15 @@ var chunk_list: Dictionary[Vector3i, Chunk] = {}
 var player: CharacterBody3D
 var player_last_ck: Vector3i
 
+var last_render_dist: int
+
 var chunk_side_size: float = float(chunk_size.x)
 
 func _ready() -> void:
 	SignalBus.chunk_gen_ended.connect(on_chunk_gen_ended)
 	SignalBus.meshing_ended.connect(on_chunk_mesh_ended)
 	player = get_parent().find_child("Player")
+	last_render_dist = render_distance
 
 func chunk_load(chunk_key: Vector3i) -> void:
 	var chunk: Chunk = chunk_list[chunk_key]
@@ -56,6 +59,10 @@ func _process(_delta: float) -> void:
 		var player_ck: Vector3i = TerrainUtil.get_player_chunk(player.position,chunk_size,block_size)
 		if player_last_ck != player_ck or not player_last_ck:
 			terrain_process(player_ck)
+		if last_render_dist != render_distance:
+			last_render_dist = render_distance
+			terrain_process(player_ck)
+			
 		player_last_ck = player_ck
 
 func terrain_process(player_ck: Vector3i) -> void:
