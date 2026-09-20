@@ -3,7 +3,7 @@ class_name MarchingCubes
 
 static var flat_shading: bool = true
 
-static func generate_mesh(chunk_data: PackedFloat32Array, chunk_size: Vector3i, block_size: float, block_data: PackedInt32Array) -> ArrayMesh:
+static func generate_mesh(chunk_data: Dictionary[Vector3i, float], chunk_size: Vector3i, block_size: float, block_data: Dictionary[Vector3i, int]) -> ArrayMesh:
 	
 	var vertices: PackedVector3Array = PackedVector3Array()
 	var normals: PackedVector3Array = PackedVector3Array()

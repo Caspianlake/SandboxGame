@@ -65,9 +65,9 @@ func terrain_process(player_ck: Vector3i) -> void:
 			activate(Vector3i(player_ck.x + cx,0,player_ck.z + cz))
 	reload()
 
-func on_chunk_gen_ended(chunk_key: Vector3i, chunk_data: PackedFloat32Array, block_data: PackedInt32Array) -> void:
+func on_chunk_gen_ended(chunk_key: Vector3i, chunk_data: Dictionary[Vector3i, float], block_data: Dictionary[Vector3i, int]) -> void:
 	chunk_list[chunk_key].status = "unmeshed"
-	WorkerThreadPool.add_task($TerrainMesher.mesh_chunk.bind(chunk_key, chunk_data, block_data))
+	ThreadPool.add_task($TerrainMesher.mesh_chunk.bind(chunk_key, chunk_data, block_data))
 	
 
 func on_chunk_mesh_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
