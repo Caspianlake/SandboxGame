@@ -2,7 +2,7 @@ extends Node3D
 
 @export_category("Terrain")
 @export var render_distance: int = 3 
-@export var chunk_size: Vector3i = Vector3i(32,512,32)
+@export var chunk_size: Vector3i = Vector3i(16,256,16)
 @export var block_size: float = 0.5
 
 var chunk_list: Dictionary[Vector3i, Chunk] = {}
@@ -12,11 +12,8 @@ var player_last_ck: Vector3i
 
 var last_render_dist: int
 
-var chunk_side_size: float = float(chunk_size.x)
-
 func _ready() -> void:
 	SignalBus.chunk_gen_ended.connect(on_chunk_gen_ended)
-	SignalBus.meshing_ended.connect(on_chunk_mesh_ended)
 	player = get_parent().find_child("Player")
 	last_render_dist = render_distance
 
@@ -25,7 +22,7 @@ func chunk_load(chunk_key: Vector3i) -> void:
 	chunk.instance = MeshInstance3D.new()
 	chunk.instance.material_override = load("res://Resources/UniversalMaterial.tres")
 	chunk.instance.mesh = chunk.mesh
-	chunk.instance.position = Vector3(chunk_key.x*chunk_side_size*block_size,0,chunk_key.z*chunk_side_size*block_size)
+	chunk.instance.position = Vector3(chunk_key.x*chunk_size.x*block_size,0,chunk_key.z*chunk_size.x*block_size)
 	$Chunks.add_child(chunk.instance)
 	chunk.status = "loaded"
 
@@ -72,12 +69,7 @@ func terrain_process(player_ck: Vector3i) -> void:
 			activate(Vector3i(player_ck.x + cx,0,player_ck.z + cz))
 	reload()
 
-func on_chunk_gen_ended(chunk_key: Vector3i, chunk_data: Dictionary[Vector3i, float], block_data: Dictionary[Vector3i, int]) -> void:
-	chunk_list[chunk_key].status = "unmeshed"
-	ThreadPool.add_task($TerrainMesher.mesh_chunk.bind(chunk_key, chunk_data, block_data))
-	
-
-func on_chunk_mesh_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
+func on_chunk_gen_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
 	chunk_list[chunk_key].mesh = chunk_mesh
 	chunk_list[chunk_key].status = "unloaded"
 	reload()
