@@ -2,7 +2,6 @@ extends Node
 
 @export_category("Generation Settings")
 @export var main_noise: FastNoiseLite = FastNoiseLite.new()
-@export var second_noise: FastNoiseLite = FastNoiseLite.new()
 @export var height_curve: Curve = Curve.new()
 
 @export var lod_step: int = 2
@@ -26,8 +25,6 @@ func generate_chunk(chunk_key: Vector3i) -> void:
 			var world_z: float = float(bz + chunk_offset.z)
 			var fz: float = snappedf(world_z - (step_f - 1.0) / 2.0, step_f)
 			var raw_noise: float = (main_noise.get_noise_2d(fx, fz) + 1) / 2
-			var pow_noise: float = (second_noise.get_noise_2d(fx,fz)+ 1) / 1.5
-			raw_noise = remap(raw_noise,0.0,1.0,0.0,pow_noise)
 			var final_noise = remap(raw_noise,0.0,1.0,0.0,chunk_size.y)
 			for by in range(-1, chunk_size.y + 2):
 				var fy: float = snappedf(float(by), step_f)
