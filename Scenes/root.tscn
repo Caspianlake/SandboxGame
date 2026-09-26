@@ -15,9 +15,7 @@
 [ext_resource type="Script" uid="uid://b4tkplvh7fq40" path="res://addons/sky_3d/src/SkyDome.gd" id="20_k8rbf"]
 [ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="21_8p807"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ogk07"]
-noise_type = 2
-fractal_type = 0
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_20eh2"]
 
 [sub_resource type="Curve" id="Curve_lwnbm"]
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(0.5, 0.5), 1.0, 1.0, 1, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
@@ -87,8 +85,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.0015556354, 0.0015556354)
-shader_parameter/cirrus_position2 = Vector2(0.0015556354, 0.0015556354)
+shader_parameter/cirrus_position1 = Vector2(0.23539232, 0.23539232)
+shader_parameter/cirrus_position2 = Vector2(0.23539232, 0.23539232)
 shader_parameter/cirrus_texture = ExtResource("13_teq3f")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -98,7 +96,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(0.0077781705, 0.0077781705)
+shader_parameter/cumulus_position = Vector2(31.267996, 31.267996)
 shader_parameter/cumulus_texture = ExtResource("14_capts")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -135,12 +133,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 44.841084, 0)
 
 [node name="Terrain" type="Node3D" parent="World" unique_id=1542926871]
 script = ExtResource("2_vnucn")
-render_distance = 12
-chunk_size = Vector3i(32, 256, 32)
 
 [node name="TerrainGenerator" type="Node" parent="World/Terrain" unique_id=1979561948]
 script = ExtResource("3_c3mwy")
-main_noise = SubResource("FastNoiseLite_ogk07")
+main_noise = SubResource("FastNoiseLite_20eh2")
 height_curve = SubResource("Curve_lwnbm")
 metadata/_custom_type_script = "uid://dev35iofgrd2g"
 

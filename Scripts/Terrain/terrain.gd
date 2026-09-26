@@ -2,7 +2,7 @@ extends Node3D
 
 @export_category("Terrain")
 @export var render_distance: int = 3 
-@export var chunk_size: Vector3i = Vector3i(16,256,16)
+@export var chunk_size: Vector3i = Vector3i(32,256,32)
 @export var block_size: float = 0.5
 
 var chunk_list: Dictionary[Vector3i, Chunk] = {}

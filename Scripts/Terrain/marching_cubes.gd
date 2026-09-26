@@ -54,13 +54,13 @@ static func generate_mesh(chunk_data: Dictionary[Vector3i, float], chunk_size: V
 	return FinalMesh
 
 static func calculate_interpolation(a:Vector3i, b:Vector3i, chunk_data: Dictionary[Vector3i, float]) -> Vector3:
-	var val_a = chunk_data[Vector3i(a.x,a.y,a.z)]
-	var val_b = chunk_data[Vector3i(b.x,b.y,b.z)]
+	var val_a: float = chunk_data[Vector3i(a.x,a.y,a.z)]
+	var val_b: float = chunk_data[Vector3i(b.x,b.y,b.z)]
 	
-	var fa = Vector3(a)
-	var fb = Vector3(b)
+	var fa := Vector3(a)
+	var fb := Vector3(b)
 	
-	var t = (0 - val_a)/(val_b-val_a)
+	var t: float = (0 - val_a)/(val_b-val_a)
 	return fa+t*(fb-fa)
 
 static func calculate_normal(a:Vector3i, b:Vector3i, chunk_data: Dictionary[Vector3i, float]) -> Vector3:
