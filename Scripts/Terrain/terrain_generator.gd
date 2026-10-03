@@ -25,13 +25,14 @@ func generate_chunk(chunk_key: Vector3i) -> void:
 			var world_z: float = float(bz + chunk_offset.z)
 			var fz: float = snappedf(world_z - (step_f - 1.0) / 2.0, step_f)
 			var raw_noise: float = (main_noise.get_noise_2d(fx, fz) + 1) / 2
+			raw_noise = pow(raw_noise,2.0)
 			var final_noise = remap(raw_noise,0.0,1.0,0.0,chunk_size.y)
 			for by in range(-1, chunk_size.y + 1):
 				var fy: float = snappedf(float(by), step_f)
 				var block: int = -1
 				var fby: float = float(by) / float(chunk_size.y)
 				
-				if fy <= final_noise.y:
+				if fy <= final_noise:
 					if fby < 83.0 / 256.0 :
 						block = 2
 					elif fby < 91 / 256.0:
