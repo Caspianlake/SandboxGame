@@ -4,16 +4,23 @@ extends Node
 @export var main_noise: FastNoiseLite = FastNoiseLite.new()
 @export var height_curve: Curve = Curve.new()
 @export var lod_step: int = 1
-@export_category("Mesher")
-@export var mesher: Resource = BlockMesher.new()
+
+var base_block
+var scenario
+
+func _ready() -> void:
+	scenario = owner.find_child("World").get_world_3d().scenario
+	base_block = BoxMesh.new()
+	base_block.size = Vector3(0.5,0.5,0.5)
 
 func generate_chunk(chunk_key: Vector3i) -> void:
 	var t = Time.get_ticks_msec()
+	var final_data:= {
+		"Position": PackedInt64Array(),
+		"BlockID": PackedInt64Array(),
+	}
 	
 	var chunk_size: Vector3i = get_parent().chunk_size
-	var block_size: float = get_parent().block_size
-	
-	var block_data: Dictionary[Vector3i, int] = {}
 	var chunk_offset: Vector3i = Vector3i(chunk_size.x * chunk_key.x, chunk_size.y * chunk_key.y, chunk_size.z * chunk_key.z)
 	
 	var step_f: float = float(lod_step)
@@ -47,19 +54,13 @@ func generate_chunk(chunk_key: Vector3i) -> void:
 						block = 4
 				else:
 					block = -1
-				
-				
-				
-				
-				
-				
-				
-				block_data[Vector3i(bx,by,bz)] = block
-				
+				if block != -1:
+					final_data["BlockID"].append(block)
+					final_data["Position"].append(bx)
+					final_data["Position"].append(by)
+					final_data["Position"].append(bz)
+					
+	
 	print("Chunk generated in: " + str(Time.get_ticks_msec() - t))
 	
-	t = Time.get_ticks_msec()
-	var new_mesh: ArrayMesh = mesher.generate_mesh(chunk_size,block_size,block_data)
-	print("Chunk meshed in: " + str(Time.get_ticks_msec() - t))
-	
-	SignalBus.chunk_gen_ended.emit.call_deferred(chunk_key, new_mesh)
+	SignalBus.chunk_gen_ended.emit.call_deferred(chunk_key, final_data)

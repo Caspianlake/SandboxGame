@@ -19,16 +19,9 @@ func _ready() -> void:
 
 func chunk_load(chunk_key: Vector3i) -> void:
 	var chunk: Chunk = chunk_list[chunk_key]
-	chunk.instance = MeshInstance3D.new()
-	chunk.instance.material_override = load("res://Resources/UniversalMaterial.tres")
-	chunk.instance.mesh = chunk.mesh
-	chunk.instance.position = Vector3(chunk_key.x*chunk_size.x*block_size,0,chunk_key.z*chunk_size.x*block_size)
-	$Chunks.add_child(chunk.instance)
 	chunk.status = "loaded"
 
 func chunk_unload(chunk: Chunk) -> void:
-	chunk.instance.queue_free()
-	chunk.instance = null
 	chunk.status = "unloaded"
 
 func reload() -> void:
@@ -69,13 +62,12 @@ func terrain_process(player_ck: Vector3i) -> void:
 			activate(Vector3i(player_ck.x + cx,0,player_ck.z + cz))
 	reload()
 
-func on_chunk_gen_ended(chunk_key: Vector3i, chunk_mesh: Mesh) -> void:
-	chunk_list[chunk_key].mesh = chunk_mesh
+func on_chunk_gen_ended(chunk_key: Vector3i, chunk_data: Dictionary) -> void:
+	chunk_list[chunk_key].data = chunk_data
 	chunk_list[chunk_key].status = "unloaded"
 	reload()
 
 class Chunk:
 	var active: bool = false
 	var status: String = "incomplete"
-	var mesh: Mesh
-	var instance: MeshInstance3D
+	var data: Dictionary

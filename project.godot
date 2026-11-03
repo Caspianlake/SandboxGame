@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="SandboxGame"
-run/main_scene="uid://b2w3l77n766g0"
+run/main_scene="uid://c7aug7lgcaxio"
 config/features=PackedStringArray("4.7", "Forward Plus")
 run/max_fps=170
 config/icon="res://icon.svg"
